@@ -2,6 +2,9 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
 
+const remote = require("@electron/remote/main")
+remote.initialize()
+
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith('6.1')) app.disableHardwareAcceleration()
 
@@ -33,6 +36,9 @@ async function createWindow() {
   win = new BrowserWindow({
     title: 'Main window',
     icon: join(ROOT_PATH.public, 'favicon.ico'),
+    width:1400,
+    height:800,
+    resizable:false,
     webPreferences: {
       preload,
       nodeIntegration: true,
@@ -44,8 +50,10 @@ async function createWindow() {
     win.loadFile(indexHtml)
   } else {
     win.loadURL(url)
-    // win.webContents.openDevTools()
+    win.webContents.openDevTools()
   }
+
+  remote.enable(win.webContents)
 
   // Test actively push message to the Electron-Renderer
   win.webContents.on('did-finish-load', () => {

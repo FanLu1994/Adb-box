@@ -9,8 +9,10 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    },
     "strict": true,
-    "paths": {},
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true
   },

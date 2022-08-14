@@ -1,22 +1,31 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
+import Home from './Layout/Home.vue'
+import createContextMenu from "@/utils/contextMenu";
+import {onMounted} from "vue";
+
+onMounted(()=>{
+  createContextMenu()
+})
+
+
 </script>
 
 <template>
-  <div class="logo-box">
-    <img style="height:140px;" src="./assets/electron.png" >
-    <span/>
-    <img style="height:140px;" src="./assets/vite.svg" >
-    <span/>
-    <img style="height:140px;" src="./assets/vue.png" >
-  </div>
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
-  <div class="static-public">
-    Place static files into the <code>/public</code> folder
-    <img style="width:77px;" :src="'./node.png'" >
-  </div>
+<!--  <div class="logo-box">-->
+<!--    <img style="height:140px;" src="./assets/electron.png" >-->
+<!--    <span/>-->
+<!--    <img style="height:140px;" src="./assets/vite.svg" >-->
+<!--    <span/>-->
+<!--    <img style="height:140px;" src="./assets/vue.png" >-->
+<!--  </div>-->
+<!--  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />-->
+<!--  <div class="static-public bg-red-200">-->
+<!--    Place static files into the <code>/public</code> folder-->
+<!--    <img style="width:77px;" :src="'./node.png'" >-->
+<!--  </div>-->
+  <home></home>
 </template>
 
 <style>
@@ -26,7 +35,8 @@ import HelloWorld from './components/HelloWorld.vue'
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 752px;
+  width: 100%;
 }
 
 .logo-box {
