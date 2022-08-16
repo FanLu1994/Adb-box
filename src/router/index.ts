@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'Adb',
                 component:()=>import('@/views/opt/AdbCommand.vue'),
                 meta:{
-                    title:'adb控制'
+                    title:'adb命令'
                 }
             },
             {

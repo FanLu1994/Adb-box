@@ -1,23 +1,56 @@
 <template>
   <div class="flex w-full justify-center items-center">
-    <div>
-      菜单1
-    </div>
-    <div>
-      菜单1
-    </div>
-    <div>
-      菜单1
+    <div v-for="item in menu" class="menu-item" @click="onClickMenu(item)">
+      {{item.title}}
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: "TopMenu"
+<script lang="ts" setup>
+
+import {useRouter} from "vue-router";
+
+interface menuItem{
+  title:string,
+  path:string,
 }
+
+const menu = [
+  {
+    title:'Adb命令',
+    path:'/adb',
+  },
+  {
+    title:'终端',
+    path:'/terminal',
+  },
+  {
+    title:'日志',
+    path:'/logcat',
+  },
+  {
+    title:'应用管理',
+    path:'/appManager',
+  },
+]
+
+const router = useRouter()
+const onClickMenu = (menuItem:menuItem)=>{
+  router.push(menuItem.path)
+}
+
 </script>
 
-<style scoped>
+<style scoped lang="less">
+.menu-item{
+  border: 1px solid #eeeeee;
+  padding: 2px 5px;
+  width: 100px;
+  background: #10B981;
+  color:white;
+  &:hover{
+    background: #34D399;
+  }
+}
 
 </style>
