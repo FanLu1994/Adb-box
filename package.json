@@ -41,7 +41,9 @@
   ],
   "dependencies": {
     "@electron/remote": "^2.0.8",
+    "adb-ts": "^2.1.2",
     "element-plus": "^2.2.13",
+    "pinia": "^2.0.18",
     "vue-router": "^4.0.13"
   }
 }
