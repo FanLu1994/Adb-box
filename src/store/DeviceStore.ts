@@ -8,13 +8,13 @@ import { defineStore } from 'pinia'
 
 interface MyDevice {
     model:string,
-    name:string,
-    deviceID:string,
+    product:string,
+    id:string,
 }
 
 export const DeviceStore = defineStore('device',{
     state:()=>{
-        let deviceList = new Array<MyDevice>;
+        let deviceList = new Map<string,MyDevice>;
         let currentDevice:MyDevice|null = null
         return{
             deviceList:deviceList,
@@ -25,5 +25,23 @@ export const DeviceStore = defineStore('device',{
     getters:{
       CurrentDevice:state => state.currentDevice,
       DeviceList: state => state.deviceList,
+    },
+
+    actions:{
+        AddDevice(device:MyDevice){
+            if(!this.deviceList.has(device.id)){
+                this.deviceList.set(device.id,device)
+            }
+            console.log(this.DeviceList)
+        },
+
+        RemoveDevice(deviceID:string){
+            if(this.deviceList.has(deviceID)){
+                this.deviceList.delete(deviceID)
+            }
+            console.log(this.DeviceList)
+        }
+
     }
+
 })
