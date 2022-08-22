@@ -1,0 +1,6 @@
+
+[2022/8/22 19:34:54]
+  Command: "vite serve".
+  The main field in package.json may be incorrect, which causes the App to fail to start.
+  File build path: "D:/app/adb-box/dist/electron/main/index.js".
+  Recommended main value: "D:/app/adb-box/dist/electron/main/index.js".
