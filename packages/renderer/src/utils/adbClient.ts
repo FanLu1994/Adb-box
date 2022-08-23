@@ -26,12 +26,13 @@ export class CustomAdbClient {
             .then(function(tracker:any) {
                 tracker.on('add', async function(device:AdbDevice) {
                     console.log('Device %s was plugged in', device.id)
-                    console.log('Device %s was plugged in', device.product)
-                    console.log('Device %s was plugged in', device.model)
                     // client.listPackages(device.id).then((properties:any)=>{
                     //     console.log(properties)
                     // })
-                    deviceStore.AddDevice({product:device.product,id:device.id,model:device.model})
+                    // adb shell getprop | findstr product
+                    let model = await device.getProp('ro.product.model')
+                    let brand = await device.getProp('ro.product.vendor.brand')
+                    deviceStore.AddDevice({product:brand,id:device.id,model:model})
                 })
                 tracker.on('remove',async function(device:any) {
                     console.log('Device %s was unplugged', device.id)
@@ -47,8 +48,8 @@ export class CustomAdbClient {
     }
 
     // 获取设备信息
-    static getDeviceProp(deviceId:string){
-
+    static async getDeviceProp(deviceId:string,prop:string){
+        return await client.getProp(deviceId,prop)
     }
 
     // 执行adb命令

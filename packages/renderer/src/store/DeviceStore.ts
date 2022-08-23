@@ -24,7 +24,13 @@ export const DeviceStore = defineStore('device',{
 
     getters:{
       CurrentDevice:state => state.currentDevice,
-      DeviceList: state => state.deviceList,
+      DeviceList: (state):MyDevice[]=>{
+          let result = []
+          for(let device of state.deviceList.values()){
+              result.push(device)
+          }
+          return result
+      },
     },
 
     actions:{
