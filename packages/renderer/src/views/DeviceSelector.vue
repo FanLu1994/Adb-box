@@ -43,6 +43,7 @@ const changeDevice = async (deviceId:any)=>{
   deviceInfo.name = await CustomAdbClient.getDeviceProp(deviceId,'ro.product.marketname')
   deviceInfo.board = await CustomAdbClient.getDeviceProp(deviceId,'ro.product.cpu.abi')
   console.log(deviceInfo)
+  deviceStore.SetCurrentDevice(deviceId)
 }
 
 </script>
