@@ -21,6 +21,9 @@ export const AdbStore = defineStore('adb',{
                     ['返回','shell input keyevent 4'],
                     ['设置','shell am start -a android.settings.SETTINGS'],
                     ['开发者','shell am start -a com.android.settings.APPLICATION_DEVELOPMENT_SETTINGS'],
+                    ['电源键','shell input keyevent 26'],
+                    ['解锁(Redmi K40)','shell input swipe 300 1000 300 500'],
+                    ['屏幕密度','shell wm density'],
                 ]
             )
         }
@@ -47,7 +50,7 @@ export const AdbStore = defineStore('adb',{
             }
         },
 
-        RemoveDevice(title:string){
+        RemoveCommand(title:string){
             this.adbMap.delete(title)
         }
 

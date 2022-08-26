@@ -45,6 +45,9 @@ export const DeviceStore = defineStore('device',{
             if(this.deviceList.has(deviceID)){
                 this.deviceList.delete(deviceID)
             }
+            if(this.currentDevice.id===deviceID){
+                this.currentDevice = null as any
+            }
             console.log(this.DeviceList)
         },
 

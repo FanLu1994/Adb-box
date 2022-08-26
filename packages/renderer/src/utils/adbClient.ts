@@ -30,9 +30,12 @@ export class CustomAdbClient {
                     //     console.log(properties)
                     // })
                     // adb shell getprop | findstr product
-                    let model = await device.getProp('ro.product.model')
-                    let brand = await device.getProp('ro.product.vendor.brand')
-                    deviceStore.AddDevice({product:brand,id:device.id,model:model})
+                    setTimeout(async () => {
+                        let model = await device.getProp('ro.product.model')
+                        let brand = await device.getProp('ro.product.vendor.brand')
+                        deviceStore.AddDevice({product: brand, id: device.id, model: model})
+                    },1000)
+
                 })
                 tracker.on('remove',async function(device:any) {
                     console.log('Device %s was unplugged', device.id)
@@ -53,10 +56,8 @@ export class CustomAdbClient {
     }
 
     // 执行adb命令
-    static execAdb(deviceId:string,command:string){
-        client.execDevice(deviceId, command).then((res:string) =>{
-            console.log(res)
-        })
+    static execAdb(deviceId:string,command:string,callback:((err: Error, value: string) => void)){
+        client.execDevice(deviceId, command,callback)
     }
 
     // 推送文件到设备中

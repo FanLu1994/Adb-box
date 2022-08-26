@@ -25,7 +25,11 @@ import {CustomAdbClient} from "../utils/adbClient";
 const deviceStore = DeviceStore()
 
 const deviceList = computed(()=>{
-  return deviceStore.DeviceList
+  let res = deviceStore.DeviceList
+  if(res.length===0){
+    currentDevice.value = null
+  }
+  return res
 })
 
 const deviceInfo = reactive({
