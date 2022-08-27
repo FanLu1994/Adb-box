@@ -5,6 +5,7 @@
  * @project: adb-box
  */
 import {defineStore} from 'pinia'
+import {ElMessage} from "element-plus";
 
 interface MyDevice {
     model:string,
@@ -37,12 +38,22 @@ export const DeviceStore = defineStore('device',{
         AddDevice(device:MyDevice){
             if(!this.deviceList.has(device.id)){
                 this.deviceList.set(device.id,device)
+                ElMessage.info(`设备${device.product}-${device.model}已连接`)
             }
             console.log(this.DeviceList)
+
         },
 
         RemoveDevice(deviceID:string){
             if(this.deviceList.has(deviceID)){
+                let device  = this.deviceList.get(deviceID)
+                if(device!=undefined){
+                    ElMessage.info({
+                        message:`设备${device.product}-${device.model}断开连接`,
+                        showClose:true,
+                        offset:15,
+                    })
+                }
                 this.deviceList.delete(deviceID)
             }
             if(this.currentDevice.id===deviceID){

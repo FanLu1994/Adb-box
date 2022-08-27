@@ -10,6 +10,7 @@
     </el-select>
   </div>
   <div class="flex justify-between px-5 bg-red-400 text-white">
+    <span>生产厂商:{{deviceInfo.brand}}</span>
     <span>内核版本:{{deviceInfo.sdk}}</span>
     <span>系统版本:{{deviceInfo.system}}</span>
     <span>设备名:{{deviceInfo.name}}</span>
@@ -37,6 +38,7 @@ const deviceInfo = reactive({
   system:0,
   name:'',
   board:'',
+  brand:''
 })
 
 // 选择设备
@@ -46,6 +48,7 @@ const changeDevice = async (deviceId:any)=>{
   deviceInfo.system = await CustomAdbClient.getDeviceProp(deviceId,'ro.build.version.release')
   deviceInfo.name = await CustomAdbClient.getDeviceProp(deviceId,'ro.product.marketname')
   deviceInfo.board = await CustomAdbClient.getDeviceProp(deviceId,'ro.product.cpu.abi')
+  deviceInfo.brand = await CustomAdbClient.getDeviceProp(deviceId,'ro.product.manufacturer')
   console.log(deviceInfo)
   deviceStore.SetCurrentDevice(deviceId)
 }

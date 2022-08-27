@@ -16,19 +16,30 @@
       <el-button type="primary">添加到常用</el-button>
     </div>
     <div class="adb-terminal">
-
+      <p v-for="(adbMsg,index) in msgList" :key="index" :class="`${adbMsg.type}-msg`">
+        $ {{adbMsg.msg}}
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import {AdbCommand, AdbStore} from "../../store/AdbStore";
-import {computed} from "vue";
+import {computed, reactive, ref} from "vue";
 import {DeviceStore} from "../../store/DeviceStore";
 import {CustomAdbClient} from "../../utils/adbClient";
+import {ElMessage} from "element-plus";
 
 const adbStore = AdbStore()
 const deviceStore = DeviceStore()
+
+interface AdbMsg{
+  type:string,   // cmd:命令  info:命令执行结果  err:错误
+  msg:string,
+}
+
+
+const msgList = ref([] as AdbMsg[])
 
 const adbList = computed(()=>{
   return adbStore.AdbList
@@ -37,10 +48,32 @@ const adbList = computed(()=>{
 const onExecAdbCmd = (adbcmd:AdbCommand)=>{
   console.log(deviceStore.CurrentDevice)
   if(!deviceStore.CurrentDevice){
+    ElMessage.error({
+      message:'未选择任何设备',
+      showClose:true,
+      duration:3000,
+    })
+  }
+  msgList.value.push({
+    type:'cmd',
+    msg:'adb '+adbcmd.cmd,
+  })
+  if(!deviceStore.CurrentDevice){
     return
   }
-  CustomAdbClient.execAdb(deviceStore.CurrentDevice.id,adbcmd.cmd,(err,string)=>{
-    console.log(string)
+  CustomAdbClient.execAdb(deviceStore.CurrentDevice.id,adbcmd.cmd,(err,res)=>{
+    if(err){
+      msgList.value.push({
+        type:'err',
+        msg:err.message,
+      })
+    }else{
+      if(res===""){return}
+      msgList.value.push({
+        type:'info',
+        msg:res,
+      })
+    }
   })
 }
 
@@ -90,6 +123,18 @@ const onExecAdbCmd = (adbcmd:AdbCommand)=>{
     cursor:text;
     user-select: text;
   }
+}
+
+.cmd-msg{
+  color:#E2E8F0;
+}
+
+.info-msg{
+  color:#F9FAFB;
+}
+
+.err-msg{
+  color:#EF4444;
 }
 
 </style>
