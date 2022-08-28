@@ -57,6 +57,10 @@ export class CustomAdbClient {
 
     // 执行adb命令
     static execAdb(deviceId:string,command:string,callback:((err: Error, value: string) => void)){
+        if(deviceId===null){
+            client.exec(command,callback)
+            return
+        }
         client.execDevice(deviceId, command,callback)
     }
 

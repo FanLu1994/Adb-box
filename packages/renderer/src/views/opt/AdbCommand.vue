@@ -1,19 +1,25 @@
 <template>
   <div class="adb-cmd-container">
-    <div class="adb-cmd" v-for="(adbCommand,index) in adbList" :key="index" @click="onExecAdbCmd(adbCommand)">
+    <div class="adb-cmd" v-for="(adbCommand,index) in adbList"
+         @mousedown="onLongPress(adbCommand.title)"
+         @mouseup="mouseUp"
+         :key="index" @click="onExecAdbCmd(adbCommand)">
       {{adbCommand.title}}
     </div>
   </div>
 
   <div class="adb-terminal-container">
     <div class="flex">
-      <el-input placeholder="请输入adb命令">
-        <template #prefix>
+      <el-input placeholder=" 请输入adb命令"
+                clearable
+                v-model="inputCmd.cmd"
+                @keyup.enter="onExecAdbCmd(inputCmd)">
+        <template #prepend>
           adb
         </template>
       </el-input>
-      <el-button type="primary">执行</el-button>
-      <el-button type="primary">添加到常用</el-button>
+      <el-button type="primary" @click="onExecAdbCmd(inputCmd)">执行</el-button>
+      <el-button type="primary" @click="addCmdToList">添加到常用</el-button>
     </div>
     <div class="adb-terminal">
       <p v-for="(adbMsg,index) in msgList" :key="index" :class="`${adbMsg.type}-msg`">
@@ -25,10 +31,10 @@
 
 <script setup lang="ts">
 import {AdbCommand, AdbStore} from "../../store/AdbStore";
-import {computed, reactive, ref} from "vue";
+import {computed, reactive, ref, watch} from "vue";
 import {DeviceStore} from "../../store/DeviceStore";
 import {CustomAdbClient} from "../../utils/adbClient";
-import {ElMessage} from "element-plus";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 const adbStore = AdbStore()
 const deviceStore = DeviceStore()
@@ -37,14 +43,17 @@ interface AdbMsg{
   type:string,   // cmd:命令  info:命令执行结果  err:错误
   msg:string,
 }
-
-
+const inputCmd = reactive({
+  title:'',
+  cmd:'',
+})
 const msgList = ref([] as AdbMsg[])
 
 const adbList = computed(()=>{
   return adbStore.AdbList
 })
 
+// 执行shell命令
 const onExecAdbCmd = (adbcmd:AdbCommand)=>{
   console.log(deviceStore.CurrentDevice)
   if(!deviceStore.CurrentDevice){
@@ -54,13 +63,15 @@ const onExecAdbCmd = (adbcmd:AdbCommand)=>{
       duration:3000,
     })
   }
-  msgList.value.push({
-    type:'cmd',
-    msg:'adb '+adbcmd.cmd,
-  })
+
   if(!deviceStore.CurrentDevice){
     return
   }
+  msgList.value.push({
+    type:'cmd',
+    msg:`adb -s ${deviceStore.CurrentDevice.id} ${adbcmd.cmd}`,
+  })
+
   CustomAdbClient.execAdb(deviceStore.CurrentDevice.id,adbcmd.cmd,(err,res)=>{
     if(err){
       msgList.value.push({
@@ -75,6 +86,71 @@ const onExecAdbCmd = (adbcmd:AdbCommand)=>{
       })
     }
   })
+}
+
+// 添加常用命令
+const addCmdToList = ()=>{
+  if(inputCmd.cmd===""){
+    return
+  }
+  if(!adbStore.ValidCmd(inputCmd.cmd)){
+    ElMessage.error({
+      message:'常用命令已存在',
+      showClose:true,
+    })
+    return
+  }
+
+  ElMessageBox.prompt('请输入命令名', '提示', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    inputPattern: /[^\s]/,
+    inputErrorMessage: '该命名不可用',
+  })
+      .then(({ value }) => {
+        adbStore.AddCommand(
+            value,inputCmd.cmd
+        )
+
+      })
+      .catch(() => {
+
+      })
+}
+
+// 长按删除
+let counter = setInterval(()=>{});
+const onLongPress = (title:string)=>{
+  console.log(title)
+  let timeStart = new Date().getTime()
+  counter = setInterval(()=>{
+    let timeNow = new Date().getTime()
+    if(timeNow-timeStart>1000){
+      clearInterval(counter)
+      delcmd(title)
+    }
+  },100)
+}
+
+const mouseUp = ()=>{
+  clearInterval(counter)
+}
+
+// 删除cmd
+const delcmd = (title:string)=>{
+  ElMessageBox.confirm(
+      '确定删除？',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  )
+      .then(() => {
+       adbStore.RemoveCommand(title)
+      })
+      .catch(() => {
+      })
 }
 
 </script>
@@ -126,7 +202,7 @@ const onExecAdbCmd = (adbcmd:AdbCommand)=>{
 }
 
 .cmd-msg{
-  color:#E2E8F0;
+  color:#CBD5E1;
 }
 
 .info-msg{

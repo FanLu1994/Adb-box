@@ -51,8 +51,24 @@ export const AdbStore = defineStore('adb',{
         },
 
         RemoveCommand(title:string){
+            console.log("删除",title)
             this.adbMap.delete(title)
-        }
+        },
 
+        // 判断命名是否可用
+        ValidTitle(title:string):Boolean{
+          if(Array.from(this.adbMap.keys()).includes(title)){
+              return false
+          }
+          return true
+        },
+
+        // 判断命令是否可用
+        ValidCmd(cmd:string):Boolean{
+            if(Array.from(this.adbMap.values()).includes(cmd)){
+                return false
+            }
+            return true
+        }
     }
 })
