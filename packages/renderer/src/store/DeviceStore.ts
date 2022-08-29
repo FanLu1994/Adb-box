@@ -6,6 +6,7 @@
  */
 import {defineStore} from 'pinia'
 import {ElMessage} from "element-plus";
+import {CustomAdbClient} from "../utils/adbClient";
 
 interface MyDevice {
     model:string,
@@ -64,7 +65,8 @@ export const DeviceStore = defineStore('device',{
 
         SetCurrentDevice(deviceID:string){
             this.currentDevice = this.deviceList.get(deviceID)??(null as any)
-        }
+        },
+
     }
 
 

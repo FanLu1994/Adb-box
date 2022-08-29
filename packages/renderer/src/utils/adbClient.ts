@@ -75,4 +75,16 @@ export class CustomAdbClient {
     static logcat(deviceId:string){
 
     }
+
+
+    async GetCurrentDeviceIP(deviceID:string){
+        const client = CustomAdbClient.getClient()
+        let ip = await client.getIpAddress(deviceID)
+        let ipArray = ip.split("\n")
+        if(ipArray.length>1){
+            return ip.split("\n")[1]
+        }else{
+            return ip.split("\n")[0]
+        }
+    }
 }

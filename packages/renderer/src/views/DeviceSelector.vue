@@ -8,6 +8,7 @@
                 >
       </el-option>
     </el-select>
+    <el-button @click="startMonitor">开始监控</el-button>
   </div>
   <div class="flex justify-between px-5 bg-red-400 text-white">
     <span>生产厂商:{{deviceInfo.brand}}</span>
@@ -22,6 +23,7 @@
 import {DeviceStore} from "../store/DeviceStore";
 import {computed, reactive, ref} from "vue";
 import {CustomAdbClient} from "../utils/adbClient";
+import {monitor} from "../utils/monitor";
 
 const deviceStore = DeviceStore()
 
@@ -51,6 +53,10 @@ const changeDevice = async (deviceId:any)=>{
   deviceInfo.brand = await CustomAdbClient.getDeviceProp(deviceId,'ro.product.manufacturer')
   console.log(deviceInfo)
   deviceStore.SetCurrentDevice(deviceId)
+}
+
+const startMonitor = ()=>{
+  monitor.StartMonitor(deviceStore.CurrentDevice.id)
 }
 
 </script>
