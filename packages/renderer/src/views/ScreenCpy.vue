@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="screen-container">
     <canvas id="canvas" style="width: 320px;padding: 5px">
     </canvas>
   </div>
@@ -78,6 +78,12 @@ onMounted(()=>{
 
 </script>
 
-<style scoped>
+<style scoped lang="less">
+.screen-container{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 </style>

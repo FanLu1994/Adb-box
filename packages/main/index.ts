@@ -34,7 +34,7 @@ const indexHtml = join(ROOT_PATH.dist, 'index.html')
 
 async function createWindow() {
   win = new BrowserWindow({
-    title: 'Main window',
+    title: 'Adb-Box',
     icon: join(ROOT_PATH.public, 'favicon.ico'),
     width:1400,
     height:800,
