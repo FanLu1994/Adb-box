@@ -10,6 +10,7 @@ import {timelineItemProps} from "element-plus";
 export interface AdbCommand {
     title:string,
     cmd:string,
+    withDevice:boolean,  // 是否需要指定设备
 }
 
 
@@ -36,6 +37,7 @@ export const AdbStore = defineStore('adb',{
                 res.push({
                     title:k,
                     cmd:v,
+                    withDevice:true,
                 })
             }
             console.log(res)

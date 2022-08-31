@@ -48,6 +48,7 @@ const onClickMenu = (menuItem:menuItem)=>{
   width: 100px;
   background: #10B981;
   color:white;
+  border-radius: 0px;
   &:hover{
     background: #34D399;
   }

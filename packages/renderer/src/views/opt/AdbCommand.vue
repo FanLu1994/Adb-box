@@ -10,14 +10,15 @@
 
   <div class="adb-terminal-container">
     <div class="flex">
-      <el-input placeholder=" 请输入adb命令"
+      <el-input placeholder=" 请输入adb命令(默认指定当前所选设备)"
                 clearable
                 v-model="inputCmd.cmd"
                 @keyup.enter="onExecAdbCmd(inputCmd)">
         <template #prepend>
-          adb
+          {{ cmdPrefix }}
         </template>
       </el-input>
+<!--      <el-button type="danger" @click="onSwitchDevice">指定设备</el-button>-->
       <el-button type="primary" @click="onExecAdbCmd(inputCmd)">执行</el-button>
       <el-button type="primary" @click="addCmdToList">添加到常用</el-button>
     </div>
@@ -31,7 +32,7 @@
 
 <script setup lang="ts">
 import {AdbCommand, AdbStore} from "../../store/AdbStore";
-import {computed, reactive, ref, watch} from "vue";
+import {computed, reactive, ref, unref, watch} from "vue";
 import {DeviceStore} from "../../store/DeviceStore";
 import {CustomAdbClient} from "../../utils/adbClient";
 import {ElMessage, ElMessageBox} from "element-plus";
@@ -48,9 +49,15 @@ const inputCmd = reactive({
   cmd:'',
 })
 const msgList = ref([] as AdbMsg[])
+const withDevice = ref(false)
+const cmdPrefix = ref("adb")
 
 const adbList = computed(()=>{
   return adbStore.AdbList
+})
+
+watch(deviceStore.CurrentDevice,()=>{
+  ElMessage.error("test")
 })
 
 // 执行shell命令
@@ -86,6 +93,15 @@ const onExecAdbCmd = (adbcmd:AdbCommand)=>{
       })
     }
   })
+}
+
+const onSwitchDevice = ()=>{
+  withDevice.value = !unref(withDevice)
+  if(withDevice){
+    cmdPrefix.value = `adb -s ${deviceStore.CurrentDevice.id}`
+  }else{
+    cmdPrefix.value = `adb`
+  }
 }
 
 // 添加常用命令
@@ -161,10 +177,12 @@ const delcmd = (title:string)=>{
   padding: 10px 10px;
   height: 100px;
   //background: #D1D5DB;
-  border-radius: 10px;
   border:1px solid #e4e7ed;
-  box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1);
   margin: 5px 5px;
+  border-radius: 10px;
+  background: white;
+  box-shadow:  6px 6px 12px #bebebe,
+    -6px -6px 12px #ffffff;
 
   .adb-cmd{
     //box-shadow: 1px 2px 2px rgba(0, 0, 0, 0.1);
@@ -198,6 +216,8 @@ const delcmd = (title:string)=>{
     overflow-y:scroll;
     cursor:text;
     user-select: text;
+    box-shadow:  6px 6px 12px #bebebe,
+      -6px -6px 12px #ffffff;
   }
 }
 

@@ -86,4 +86,11 @@ onMounted(()=>{
   align-items: center;
 }
 
+#canvas{
+  border-radius: 20px;
+  background: #e0e0e0;
+  box-shadow:  6px 6px 12px #bebebe,
+    -6px -6px 12px #ffffff;
+}
+
 </style>
