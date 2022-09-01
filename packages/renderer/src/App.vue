@@ -24,7 +24,8 @@ onMounted(()=>{
 <!--    Place static files into the <code>/public</code> folder-->
 <!--    <img style="width:77px;" :src="'./node.png'" >-->
 <!--  </div>-->
-  <router-view></router-view>
+  <router-view >
+  </router-view>
 </template>
 
 <style>

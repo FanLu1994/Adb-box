@@ -13,7 +13,8 @@ const routes: Array<RouteRecordRaw> = [
         redirect:'/adb',
         component: () => import('@/Layout/Home.vue'),
         meta: {
-            title: '首页'
+            title: '首页',
+            keepAlive:true,
         },
         children:[
             {
@@ -21,7 +22,8 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'Adb',
                 component:()=>import('@/views/opt/AdbCommand.vue'),
                 meta:{
-                    title:'adb命令'
+                    title:'adb命令',
+                    keepAlive:true,
                 }
             },
             {
@@ -29,7 +31,9 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'Terminal',
                 component:()=>import('@/views/opt/Terminal.vue'),
                 meta:{
-                    title:'终端'
+                    title:'终端',
+                    keepAlive:true,
+
                 }
             },
             {
@@ -37,7 +41,8 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'Logcat',
                 component:()=>import('@/views/opt/Logcat.vue'),
                 meta:{
-                    title:'日志'
+                    title:'日志',
+                    keepAlive:true,
                 }
             },
             {
@@ -45,7 +50,8 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'AppManager',
                 component:()=>import('@/views/opt/AppManager.vue'),
                 meta:{
-                    title:'应用管理'
+                    title:'应用管理',
+                    keepAlive:true,
                 }
             },
         ]
