@@ -30,6 +30,7 @@ export const AdbStore = defineStore('adb',{
         }
     },
 
+
     getters:{
         AdbList: (state):AdbCommand[]=>{
             let res:AdbCommand[] = []
