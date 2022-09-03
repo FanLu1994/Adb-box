@@ -109,13 +109,6 @@ const addCmdToList = ()=>{
   if(inputCmd.cmd===""){
     return
   }
-  if(!adbStore.ValidCmd(inputCmd.cmd)){
-    ElMessage.error({
-      message:'常用命令已存在',
-      showClose:true,
-    })
-    return
-  }
 
   ElMessageBox.prompt('请输入命令名', '提示', {
     confirmButtonText: '确认',

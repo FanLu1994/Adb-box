@@ -11,7 +11,6 @@ const routes: Array<RouteRecordRaw> = [
         path: '/',
         name: 'Home',
         redirect:'/adb',
-        component: () => import('@/Layout/Home.vue'),
     },
     {
         path:'/adb',

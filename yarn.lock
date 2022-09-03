@@ -3862,12 +3862,10 @@
     "q" "1.x"
     "underscore" "^1.12.0"
 
-"pinia-plugin-persist@^1.0.0":
-  "integrity" "sha512-M4hBBd8fz/GgNmUPaaUsC29y1M09lqbXrMAHcusVoU8xlQi1TqgkWnnhvMikZwr7Le/hVyMx8KUcumGGrR6GVw=="
-  "resolved" "https://registry.npmmirror.com/pinia-plugin-persist/-/pinia-plugin-persist-1.0.0.tgz"
-  "version" "1.0.0"
-  dependencies:
-    "vue-demi" "^0.12.1"
+"pinia-plugin-persistedstate@^2.1.1":
+  "integrity" "sha512-HUgsU5IRtM75eAQiIqzT3p1oPEuYH1/B2ipTMU++yE+FV0LkHaBswdKXs0RMWYCmugO8s62oxLTh/N1dLNp+5A=="
+  "resolved" "https://registry.npmmirror.com/pinia-plugin-persistedstate/-/pinia-plugin-persistedstate-2.1.1.tgz"
+  "version" "2.1.1"
 
 "pinia@^2.0.0", "pinia@^2.0.14":
   "integrity" "sha512-0nPuZR4TetT/WcLN+feMSjWJku3SQU7dBbXC6uw+R6FLQJCsg+/0pzXyD82T1FmAYe0lsx+jnEDQ1BLgkRKlxA=="
@@ -5096,11 +5094,6 @@
   "resolved" "https://registry.npmmirror.com/vue-demi/-/vue-demi-0.13.1.tgz"
   "version" "0.13.1"
 
-"vue-demi@^0.12.1":
-  "integrity" "sha512-BREuTgTYlUr0zw0EZn3hnhC3I6gPWv+Kwh4MCih6QcAeaTlaIX0DwOVN0wHej7hSvDPecz4jygy/idsgKfW58Q=="
-  "resolved" "https://registry.npmmirror.com/vue-demi/-/vue-demi-0.12.5.tgz"
-  "version" "0.12.5"
-
 "vue-router@^4.0.16":
   "integrity" "sha512-JcO7cb8QJLBWE+DfxGUL3xUDOae/8nhM1KVdnudadTAORbuxIC/xAydC5Zr/VLHUDQi1ppuTF5/rjBGzgzrJNA=="
   "resolved" "https://registry.npmmirror.com/vue-router/-/vue-router-4.0.16.tgz"
@@ -5115,7 +5108,7 @@
   dependencies:
     "@volar/vue-typescript" "0.35.2"
 
-"vue@^2.0.0 || >=3.0.0", "vue@^2.6.0 || ^3.2.0", "vue@^2.6.14 || ^3.2.0", "vue@^3.0.0-0 || ^2.6.0", "vue@^3.2.0", "vue@^3.2.25", "vue@^3.2.36", "vue@3.2.36":
+"vue@^2.6.0 || ^3.2.0", "vue@^2.6.14 || ^3.2.0", "vue@^3.0.0-0 || ^2.6.0", "vue@^3.2.0", "vue@^3.2.25", "vue@^3.2.36", "vue@3.2.36":
   "integrity" "sha512-5yTXmrE6gW8IQgttzHW5bfBiFA6mx35ZXHjGLDmKYzW6MMmYvCwuKybANRepwkMYeXw2v1buGg3/lPICY5YlZw=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-3.2.36.tgz"
   "version" "3.2.36"

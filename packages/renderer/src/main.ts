@@ -5,10 +5,10 @@ import router from "../src/router/index";
 import 'element-plus/dist/index.css'
 import './index.css'
 import { createPinia } from 'pinia'
-import piniaPersist from 'pinia-plugin-persist'
+import piniaPluginPersistedstate  from 'pinia-plugin-persistedstate'
 
 const pinia = createPinia()
-pinia.use(piniaPersist)
+pinia.use(piniaPluginPersistedstate)
 
 createApp(App).use(pinia).use(ElementPlus).use(router)
   .mount('#app')
