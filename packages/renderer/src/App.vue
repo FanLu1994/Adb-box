@@ -3,8 +3,14 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import createContextMenu from "../src/utils/contextMenu";
 import {onMounted} from "vue";
+import Home from "./Layout/Home.vue";
+import ScreenCpy from "@/views/ScreenCpy.vue";
+import OptHome from "@/views/opt/OptHome.vue";
+import DeviceSelector from "@/views/DeviceSelector.vue";
+import {CustomAdbClient} from "./utils/adbClient";
 
 onMounted(()=>{
+  CustomAdbClient.trackDevice()
   createContextMenu()
 })
 
@@ -12,21 +18,21 @@ onMounted(()=>{
 </script>
 
 <template>
-<!--  <div class="logo-box">-->
-<!--    <img style="height:140px;" src="./assets/electron.png" >-->
-<!--    <span/>-->
-<!--    <img style="height:140px;" src="./assets/vite.svg" >-->
-<!--    <span/>-->
-<!--    <img style="height:140px;" src="./assets/vue.png" >-->
-<!--  </div>-->
-<!--  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />-->
-<!--  <div class="static-public bg-red-200">-->
-<!--    Place static files into the <code>/public</code> folder-->
-<!--    <img style="width:77px;" :src="'./node.png'" >-->
-<!--  </div>-->
-  <router-view >
-  </router-view>
+  <div class="home">
+    <div class="screen">
+      <ScreenCpy></ScreenCpy>
+    </div>
+    <div class="opt">
+      <DeviceSelector></DeviceSelector>
+      <OptHome></OptHome>
+    </div>
+  </div>
 </template>
+
+<style scoped lang="less">
+@import "@/assets/less/home.less";
+
+</style>
 
 <style>
 #app {

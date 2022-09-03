@@ -10,7 +10,7 @@ import piniaPersist from 'pinia-plugin-persist'
 const pinia = createPinia()
 pinia.use(piniaPersist)
 
-createApp(App).use(ElementPlus).use(router).use(pinia)
+createApp(App).use(pinia).use(ElementPlus).use(router)
   .mount('#app')
   .$nextTick(() => {
     postMessage({ payload: 'removeLoading' }, '*')

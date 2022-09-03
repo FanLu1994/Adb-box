@@ -9,7 +9,6 @@ import AdbDevice from "adb-ts/lib/device";
 import {DeviceStore} from "../store/DeviceStore";
 
 const client = new AdbClient()
-const deviceStore = DeviceStore()
 export class CustomAdbClient {
 
     // 获取adb客户端
@@ -22,6 +21,7 @@ export class CustomAdbClient {
 
     // 设备监听
     static trackDevice(){
+        const deviceStore = DeviceStore()
         client.trackDevices()
             .then(function(tracker:any) {
                 tracker.on('add', async function(device:AdbDevice) {
