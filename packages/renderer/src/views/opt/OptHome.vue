@@ -16,6 +16,10 @@ import TopMenu from "@/views/opt/TopMenu.vue";
 
 </script>
 
-<style scoped>
+<style scoped lang="less">
+.opt-container{
+  width: 100%;
+  overflow: hidden;
+}
 
 </style>
