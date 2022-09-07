@@ -1,9 +1,12 @@
 <template>
   <div class="app-manager-container">
-    <el-button @click="RefreshAppList">刷新</el-button>
-    <el-button @click="uploadDialogVisiable = true">安装应用</el-button>
+    <div class="flex items-center justify-end pr-5 mb-2">
+      <el-button @click="RefreshAppList" type="primary">刷新</el-button>
+      <el-button @click="uploadDialogVisiable = true" type="primary">安装应用</el-button>
+    </div>
 
-    <div class="flex justify-center items-center">
+
+    <div class="flex justify-center items-center pb-5">
       <el-table :data="device.list" stripe  max-height="600" class="table" >
         <el-table-column prop="label" label="包名" :min-width="10"/>
         <el-table-column prop="packageName" label="ID" :min-width="10"/>
@@ -12,8 +15,8 @@
         <el-table-column prop="versionCode" label="版本代码" :min-width="10"/>
         <el-table-column prop="size" label="体积" :min-width="10"/>
         <el-table-column prop="" label="操作" :min-width="10">
-          <template #default="scope">
-            <el-button @click="uninstallApp(scope.row)">卸载应用</el-button>
+          <template #default="scope" >
+            <el-button class="text-sm" @click="uninstallApp(scope.row)" type="text" >卸载应用</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -21,15 +24,19 @@
 
     <el-dialog
         v-model="uploadDialogVisiable"
-        class="rounded-3xl"
+        :append-to-body="false"
+        custom-class="rounded-3xl"
         title="安装应用"
         width="50%"
     >
       <el-upload
+          v-model:file-list="apkList"
           class="upload-demo"
+          :auto-upload="false"
           drag
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-          multiple
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          accept=".apk"
       >
         <el-icon class="el-icon--upload"><upload-filled /></el-icon>
         <div class="el-upload__text">
@@ -37,15 +44,15 @@
         </div>
         <template #tip>
           <div class="el-upload__tip">
-            jpg/png files with a size less than 500kb
+            仅支持apk文件
           </div>
         </template>
       </el-upload>
       <template #footer>
       <span class="dialog-footer">
-        <el-button @click="uploadDialogVisiable = false">Cancel</el-button>
-        <el-button type="primary" @click="uploadDialogVisiable = false"
-        >Confirm</el-button
+        <el-button @click="uploadDialogVisiable = false">取消</el-button>
+        <el-button type="primary" @click="onInstallApp"
+        >确定</el-button
         >
       </span>
       </template>
@@ -57,9 +64,10 @@
 <script setup lang="ts">
 import { UploadFilled } from '@element-plus/icons-vue'
 import {GetAppList} from "../../utils/api";
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, reactive, ref, unref} from "vue";
 import {CustomAdbClient} from "../../utils/adbClient";
 import {DeviceStore} from "../../store/DeviceStore";
+import {ElMessage, UploadProps, UploadUserFile} from "element-plus";
 
 const deviceStore = DeviceStore()
 const client = CustomAdbClient.getClient()
@@ -113,6 +121,31 @@ const uninstallApp = (row:Package)=>{
   RefreshAppList()
 }
 
+// 上传文件相关钩子
+const apkList=ref<UploadUserFile[]>([])
+const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {
+  console.log(file, uploadFiles)
+}
+
+const handlePreview: UploadProps['onPreview'] = (uploadFile) => {
+  console.log(uploadFile)
+}
+
+const handleExceed: UploadProps['onExceed'] = (files, uploadFiles) => {
+  ElMessage.warning(
+      `The limit is 3, you selected ${files.length} files this time, add up to ${
+          files.length + uploadFiles.length
+      } totally`
+  )
+}
+
+
+const onInstallApp = ()=>{
+  console.log(unref(apkList)[0].raw?.path)
+  client.install(deviceStore.CurrentDevice.id,unref(apkList)[0].raw?.path as string,(err)=>{
+    console.log(err)
+  })
+}
 
 onMounted( ()=>{
  RefreshAppList()
