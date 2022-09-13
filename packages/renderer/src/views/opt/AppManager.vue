@@ -27,6 +27,7 @@
         :append-to-body="false"
         custom-class="rounded-3xl"
         title="安装应用"
+        v-loading="installLoading"
         width="50%"
     >
       <el-upload
@@ -34,13 +35,15 @@
           class="upload-demo"
           :auto-upload="false"
           drag
-          :on-preview="handlePreview"
+          :show-file-list="true"
+          :on-change="handlePreview"
           :on-remove="handleRemove"
           accept=".apk"
+          :limit="1"
       >
         <el-icon class="el-icon--upload"><upload-filled /></el-icon>
         <div class="el-upload__text">
-         拖动文件或者 <em>点击上传按钮</em>
+         拖动文件或者 <em>点击</em>
         </div>
         <template #tip>
           <div class="el-upload__tip">
@@ -67,7 +70,7 @@ import {GetAppList} from "../../utils/api";
 import {onMounted, reactive, ref, unref} from "vue";
 import {CustomAdbClient} from "../../utils/adbClient";
 import {DeviceStore} from "../../store/DeviceStore";
-import {ElMessage, UploadProps, UploadUserFile} from "element-plus";
+import {ElMessage, install, UploadProps, UploadUserFile} from "element-plus";
 
 const deviceStore = DeviceStore()
 const client = CustomAdbClient.getClient()
@@ -98,8 +101,8 @@ const device = reactive({
 
 
 // 上传文件
+const installLoading = ref(false)
 const uploadDialogVisiable = ref(false)
-
 
 // 刷新应用列表
 const RefreshAppList = async ()=>{
@@ -114,6 +117,7 @@ const RefreshAppList = async ()=>{
   })
 }
 
+// 卸载app
 const adbClient = CustomAdbClient.getClient()
 const uninstallApp = (row:Package)=>{
   console.log(row)
@@ -129,21 +133,32 @@ const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {
 
 const handlePreview: UploadProps['onPreview'] = (uploadFile) => {
   console.log(uploadFile)
-}
-
-const handleExceed: UploadProps['onExceed'] = (files, uploadFiles) => {
-  ElMessage.warning(
-      `The limit is 3, you selected ${files.length} files this time, add up to ${
-          files.length + uploadFiles.length
-      } totally`
-  )
+  // onInstallApp()
 }
 
 
 const onInstallApp = ()=>{
+  installLoading.value = true
   console.log(unref(apkList)[0].raw?.path)
   client.install(deviceStore.CurrentDevice.id,unref(apkList)[0].raw?.path as string,(err)=>{
     console.log(err)
+    if(err){
+      ElMessage.error({
+        message:err.message,
+        showClose:true,
+        duration:3000,
+      })
+    }else{
+      ElMessage.success({
+        message:"安装成功",
+        showClose:true,
+        duration:3000,
+      })
+    }
+
+    installLoading.value = false
+    uploadDialogVisiable.value = false
+    apkList.value.splice(0,apkList.value.length)
   })
 }
 
