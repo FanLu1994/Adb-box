@@ -39,7 +39,11 @@ export const DeviceStore = defineStore('device',{
         AddDevice(device:MyDevice){
             if(!this.deviceList.has(device.id)){
                 this.deviceList.set(device.id,device)
-                ElMessage.info(`设备${device.product}-${device.model}已连接`)
+                ElMessage.info({
+                    message:`设备${device.product}-${device.model}已连接`,
+                    duration:2000,
+                    showClose:true
+                })
             }
             console.log(this.DeviceList)
 
@@ -51,8 +55,8 @@ export const DeviceStore = defineStore('device',{
                 if(device!=undefined){
                     ElMessage.info({
                         message:`设备${device.product}-${device.model}断开连接`,
-                        showClose:true,
-                        offset:15,
+                        duration:2000,
+                        showClose:true
                     })
                 }
                 this.deviceList.delete(deviceID)
