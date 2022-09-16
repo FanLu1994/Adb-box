@@ -4,6 +4,8 @@ dist
 dist-ssr
 *.local
 .debug.env
+yarn.lock
+package-lock.json
 
 tmp
 **/.tmp
