@@ -1,7 +1,8 @@
 <template>
   <div class="log-container">
     <div class="flex">
-      <el-select>
+      <el-button @click="startLogcat">开启日志</el-button>
+      <el-select v-model="targetLogLevel">
         <el-option v-for="(item,index) in logLevel"
                    :key="index"
                    :label="item"
@@ -11,7 +12,7 @@
                         item}</span>`">
         </el-option>
       </el-select>
-      <el-input placeholder="请输入筛选内容" class="w-1/4"></el-input>
+      <el-input v-model="searchTarget" placeholder="请输入筛选内容" class="w-1/4"></el-input>
     </div>
     <div class="logcat-window">
 
@@ -21,6 +22,12 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
+import {CustomAdbClient} from "../../utils/adbClient";
+import {DeviceStore} from "../../store/DeviceStore";
+import {ElMessage} from "element-plus";
+import LogcatReader from "adb-ts/lib/logcat/reader";
+import {Priority} from "adb-ts";
+import LogcatEntry from "adb-ts/lib/logcat/entry";
 
 const logLevel = ref([
     'debug',
@@ -29,6 +36,7 @@ const logLevel = ref([
     'error',
     'fatal'
 ])
+const targetLogLevel = ref('debug')
 
 const getColor = (level:string)=>{
   switch (level) {
@@ -41,11 +49,50 @@ const getColor = (level:string)=>{
     case 'error':
       return "#EF4444"
     case 'fatal':
-      return "#6B7280"
+      return "#000000"
     default:
       return "black"
   }
 }
+
+const searchTarget = ref('')
+const client = CustomAdbClient.getClient()
+const deviceStore = DeviceStore()
+let reader:any
+// 启动logcat
+const startLogcat = async ()=>{
+  if(!deviceStore.CurrentDevice){
+    ElMessage.error({
+      message:'请先选择设备',
+      duration:2000,
+      showClose:true,
+    })
+  }
+  reader = await client.openLogcat(deviceStore.CurrentDevice.id)
+
+  reader.on('entry',(entry:LogcatEntry)=>{
+    console.log(entry.priority)
+    console.log(entry.date)
+    console.log(entry.pid)
+    console.log(entry.tag)
+    console.log(entry.message)
+  })
+}
+
+// 设定级别
+const setLevel = ()=>{
+  reader.setFilter((entry:any)=>{
+    return entry.prioritiy >= Priority.FATAL
+  })
+}
+
+// 设定筛选字符串
+const setSearchTarget = ()=>{
+  reader.setFilter((entry:any)=>{
+    return entry.message.includes(searchTarget.value)
+  })
+}
+
 
 </script>
 

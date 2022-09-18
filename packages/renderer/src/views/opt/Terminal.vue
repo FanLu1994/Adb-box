@@ -67,7 +67,6 @@ const initSocket = async () => {
       }
     });
     term.loadAddon(fitAddon);
-    term.loadAddon(fullscreen)
 
     term.onData(function(data) {
       websocket.send(new TextEncoder().encode("\x00" + data));
