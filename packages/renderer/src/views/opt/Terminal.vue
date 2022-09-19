@@ -60,7 +60,6 @@ const initSocket = async () => {
       screenKeys: true,
       useStyle: true,
       cursorBlink: true,
-      lineHeight:30,
       theme:{
         foreground:'white',
         background:'#2c3e50',

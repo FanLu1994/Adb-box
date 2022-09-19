@@ -2,6 +2,7 @@
   <div class="log-container">
     <div class="flex">
       <el-button @click="startLogcat">开启日志</el-button>
+      <el-button @click="stopLogcat">关闭日志</el-button>
       <el-select v-model="targetLogLevel">
         <el-option v-for="(item,index) in logLevel"
                    :key="index"
@@ -15,13 +16,13 @@
       <el-input v-model="searchTarget" placeholder="请输入筛选内容" class="w-1/4"></el-input>
     </div>
     <div class="logcat-window">
-
+      <p v-for="(entry,index) in logCatInfo.list">{{entry.message}}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import {CustomAdbClient} from "../../utils/adbClient";
 import {DeviceStore} from "../../store/DeviceStore";
 import {ElMessage} from "element-plus";
@@ -55,6 +56,11 @@ const getColor = (level:string)=>{
   }
 }
 
+const logList:LogcatEntry[] = []
+const logCatInfo = reactive({
+  list:logList
+})
+const maxLength = 10000
 const searchTarget = ref('')
 const client = CustomAdbClient.getClient()
 const deviceStore = DeviceStore()
@@ -68,15 +74,24 @@ const startLogcat = async ()=>{
       showClose:true,
     })
   }
+  // 清理logcat缓存
+  await client.execDevice(deviceStore.CurrentDevice.id,"logcat -c")
+
   reader = await client.openLogcat(deviceStore.CurrentDevice.id)
+  (reader as LogcatReader)
 
   reader.on('entry',(entry:LogcatEntry)=>{
-    console.log(entry.priority)
-    console.log(entry.date)
-    console.log(entry.pid)
-    console.log(entry.tag)
-    console.log(entry.message)
+    if(logCatInfo.list.length>=maxLength){
+      logCatInfo.list.splice(0,1)
+    }
+    logCatInfo.list.push(entry)
   })
+}
+
+const stopLogcat = ()=>{
+  if(reader) {
+    (reader as LogcatReader).end()
+  }
 }
 
 // 设定级别
