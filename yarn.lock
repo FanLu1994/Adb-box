@@ -618,6 +618,16 @@
   "resolved" "https://registry.npmmirror.com/@types/parse-json/-/parse-json-4.0.0.tgz"
   "version" "4.0.0"
 
+"@types/web-bluetooth@^0.0.14":
+  "integrity" "sha512-5d2RhCard1nQUC3aHcq/gHzWYO6K0WJmAbjO7mQJgCQKtZpgXxv1rOM6O/dBDhDYYVutk1sciOgNSe+5YyfM8A=="
+  "resolved" "https://registry.npmmirror.com/@types/web-bluetooth/-/web-bluetooth-0.0.14.tgz"
+  "version" "0.0.14"
+
+"@types/web-bluetooth@^0.0.15":
+  "integrity" "sha512-w7hEHXnPMEZ+4nGKl/KDRVpxkwYxYExuHOYXyzIzCDzEZ9ZCGMAewulr9IqJu2LR4N37fcnb1XVeuZ09qgOxhA=="
+  "resolved" "https://registry.npmmirror.com/@types/web-bluetooth/-/web-bluetooth-0.0.15.tgz"
+  "version" "0.0.15"
+
 "@types/yargs-parser@*":
   "integrity" "sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA=="
   "resolved" "https://registry.npmjs.org/@types/yargs-parser/-/yargs-parser-21.0.0.tgz"
@@ -765,23 +775,46 @@
   "version" "3.2.36"
 
 "@vueuse/core@^8.6.0":
-  "integrity" "sha512-VirzExCm/N+QdrEWT7J4uSrvJ5hquKIAU9alQ37kUvIJk9XxCLxmfRnmekYc1kz2+6BnoyuKYXVmrMV351CB4w=="
-  "resolved" "https://registry.npmmirror.com/@vueuse/core/-/core-8.6.0.tgz"
-  "version" "8.6.0"
+  "integrity" "sha512-B/Mdj9TK1peFyWaPof+Zf/mP9XuGAngaJZBwPaXBvU3aCTZlx3ltlrFFFyMV4iGBwsjSCeUCgZrtkEj9dS2Y3Q=="
+  "resolved" "https://registry.npmmirror.com/@vueuse/core/-/core-8.9.4.tgz"
+  "version" "8.9.4"
   dependencies:
-    "@vueuse/metadata" "8.6.0"
-    "@vueuse/shared" "8.6.0"
+    "@types/web-bluetooth" "^0.0.14"
+    "@vueuse/metadata" "8.9.4"
+    "@vueuse/shared" "8.9.4"
     "vue-demi" "*"
 
-"@vueuse/metadata@8.6.0":
-  "integrity" "sha512-F+CKPvaExsm7QgRr8y+ZNJFwXasn89rs5wth/HeX9lJ1q8XEt+HJ16Q5Sxh4rfG5YSKXrStveVge8TKvPjMjFA=="
-  "resolved" "https://registry.npmmirror.com/@vueuse/metadata/-/metadata-8.6.0.tgz"
-  "version" "8.6.0"
+"@vueuse/core@^9.2.0":
+  "integrity" "sha512-/MZ6qpz6uSyaXrtoeBWQzAKRG3N7CvfVWvQxiM3ei3Xe5ydOjjtVbo7lGl9p8dECV93j7W8s63A8H0kFLpLyxg=="
+  "resolved" "https://registry.npmmirror.com/@vueuse/core/-/core-9.2.0.tgz"
+  "version" "9.2.0"
+  dependencies:
+    "@types/web-bluetooth" "^0.0.15"
+    "@vueuse/metadata" "9.2.0"
+    "@vueuse/shared" "9.2.0"
+    "vue-demi" "*"
 
-"@vueuse/shared@8.6.0":
-  "integrity" "sha512-Y/IVywZo7IfEoSSEtCYpkVEmPV7pU35mEIxV7PbD/D3ly18B3mEsBaPbtDkNM/QP3zAZ5mn4nEkOfddX4uwuIA=="
-  "resolved" "https://registry.npmmirror.com/@vueuse/shared/-/shared-8.6.0.tgz"
-  "version" "8.6.0"
+"@vueuse/metadata@8.9.4":
+  "integrity" "sha512-IwSfzH80bnJMzqhaapqJl9JRIiyQU0zsRGEgnxN6jhq7992cPUJIRfV+JHRIZXjYqbwt07E1gTEp0R0zPJ1aqw=="
+  "resolved" "https://registry.npmmirror.com/@vueuse/metadata/-/metadata-8.9.4.tgz"
+  "version" "8.9.4"
+
+"@vueuse/metadata@9.2.0":
+  "integrity" "sha512-exN4KE6iquxDCdt72BgEhb3tlOpECtD61AUdXnUqBTIUCl70x1Ar/QXo3bYcvxmdMS2/peQyfeTzBjRTpvL5xw=="
+  "resolved" "https://registry.npmmirror.com/@vueuse/metadata/-/metadata-9.2.0.tgz"
+  "version" "9.2.0"
+
+"@vueuse/shared@8.9.4":
+  "integrity" "sha512-wt+T30c4K6dGRMVqPddexEVLa28YwxW5OFIPmzUHICjphfAuBFTTdDoyqREZNDOFJZ44ARH1WWQNCUK8koJ+Ag=="
+  "resolved" "https://registry.npmmirror.com/@vueuse/shared/-/shared-8.9.4.tgz"
+  "version" "8.9.4"
+  dependencies:
+    "vue-demi" "*"
+
+"@vueuse/shared@9.2.0":
+  "integrity" "sha512-NnRp/noSWuXW0dKhZK5D0YLrDi0nmZ18UeEgwXQq7Ul5TTP93lcNnKjrHtd68j2xFB/l59yPGFlCryL692bnrA=="
+  "resolved" "https://registry.npmmirror.com/@vueuse/shared/-/shared-9.2.0.tgz"
+  "version" "9.2.0"
   dependencies:
     "vue-demi" "*"
 
@@ -5090,9 +5123,9 @@
     "fsevents" "~2.3.2"
 
 "vue-demi@*":
-  "integrity" "sha512-xmkJ56koG3ptpLnpgmIzk9/4nFf4CqduSJbUM0OdPoU87NwRuZ6x49OLhjSa/fC15fV+5CbEnrxU4oyE022svg=="
-  "resolved" "https://registry.npmmirror.com/vue-demi/-/vue-demi-0.13.1.tgz"
-  "version" "0.13.1"
+  "integrity" "sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A=="
+  "resolved" "https://registry.npmmirror.com/vue-demi/-/vue-demi-0.13.11.tgz"
+  "version" "0.13.11"
 
 "vue-router@^4.0.16":
   "integrity" "sha512-JcO7cb8QJLBWE+DfxGUL3xUDOae/8nhM1KVdnudadTAORbuxIC/xAydC5Zr/VLHUDQi1ppuTF5/rjBGzgzrJNA=="
