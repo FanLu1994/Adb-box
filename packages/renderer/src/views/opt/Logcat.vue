@@ -5,18 +5,22 @@
       <el-button @click="stopLogcat">关闭日志</el-button>
       <el-select v-model="targetLogLevel">
         <el-option v-for="(item,index) in logLevel"
-                   :key="index"
-                   :label="item"
-                   :value="item"
+                   :key="item.level"
+                   :label="item.level"
+                   :value="item.level"
                    v-html="
-                      `<span style='color:${getColor(item)}'>${
-                        item}</span>`">
+                      `<span style='color:${item.color}'>${
+                        item.level}</span>`">
         </el-option>
       </el-select>
       <el-input v-model="searchTarget" placeholder="请输入筛选内容" class="w-1/4"></el-input>
     </div>
     <div class="logcat-window">
-      <p v-for="(entry,index) in logCatInfo.list">{{entry.message}}</p>
+      <p v-for="(entry,index) in logCatInfo.list" >
+        {{dateFormat(entry.date)}}
+        {{entry.priority}}
+        {{entry.message}}
+      </p>
     </div>
   </div>
 </template>
@@ -30,30 +34,51 @@ import LogcatReader from "adb-ts/lib/logcat/reader";
 import {Priority} from "adb-ts";
 import LogcatEntry from "adb-ts/lib/logcat/entry";
 
+interface CustomLevel{
+  level:string,
+  color:string,
+}
+
 const logLevel = ref([
-    'debug',
-    'info',
-    'warn',
-    'error',
-    'fatal'
+  {
+    level:'debug',
+    color:'#10B981'
+  },
+  {
+    level:'info',
+    color:'#3B82F6'
+  },
+  {
+    level:'warn',
+    color:'#F59E0B'
+  },
+  {
+    level:'error',
+    color:'#EF4444'
+  },
+  {
+    level:'fatal',
+    color:'#000000'
+  }
 ])
 const targetLogLevel = ref('debug')
 
 const getColor = (level:string)=>{
   switch (level) {
-    case 'debug':
-      return "#10B981"
-    case 'info':
-      return "#3B82F6"
-    case 'warn':
-      return "#F59E0B"
     case 'error':
-      return "#EF4444"
+      return '#EF4444'
     case 'fatal':
-      return "#000000"
+      return '#EF4444'
     default:
-      return "black"
+      return 'white'
   }
+}
+
+const dateFormat = (rawDate:string)=>{
+  const date = new Date(rawDate)
+  const res = date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+
+      ' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+  return res
 }
 
 const logList:LogcatEntry[] = []
@@ -76,9 +101,8 @@ const startLogcat = async ()=>{
   }
   // 清理logcat缓存
   await client.execDevice(deviceStore.CurrentDevice.id,"logcat -c")
-
+  await client.openLogcat(deviceStore.CurrentDevice.id)
   reader = await client.openLogcat(deviceStore.CurrentDevice.id)
-  (reader as LogcatReader)
 
   reader.on('entry',(entry:LogcatEntry)=>{
     if(logCatInfo.list.length>=maxLength){
