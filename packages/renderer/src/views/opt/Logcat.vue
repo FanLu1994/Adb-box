@@ -3,20 +3,22 @@
     <div class="flex">
       <el-button @click="startLogcat">开启日志</el-button>
       <el-button @click="stopLogcat">关闭日志</el-button>
-      <el-select v-model="targetLogLevel">
+      <el-select v-model="targetLogLevel" @change="startLogcat">
         <el-option v-for="(item,index) in logLevel"
                    :key="item.level"
-                   :label="item.level"
+                   :label="item.label"
                    :value="item.level"
                    v-html="
                       `<span style='color:${item.color}'>${
-                        item.level}</span>`">
+                        item.label}</span>`">
         </el-option>
       </el-select>
-      <el-input v-model="searchTarget" placeholder="请输入筛选内容" class="w-1/4"></el-input>
+      <el-input v-model="searchTarget"
+                placeholder="请输入筛选内容" class="w-1/4"
+                @change="startLogcat"></el-input>
     </div>
     <div class="logcat-window">
-      <p v-for="(entry,index) in logCatInfo.list" >
+      <p v-for="(entry,index) in logCatInfo.list" :style="{color:getColor(entry.priority)}">
         {{dateFormat(entry.date)}}
         {{entry.priority}}
         {{entry.message}}
@@ -35,39 +37,48 @@ import {Priority} from "adb-ts";
 import LogcatEntry from "adb-ts/lib/logcat/entry";
 
 interface CustomLevel{
-  level:string,
+  label:string,
+  level:number,
   color:string,
 }
 
 const logLevel = ref([
   {
-    level:'debug',
+    label:'debug',
+    level:3,
     color:'#10B981'
   },
   {
-    level:'info',
+    label:'info',
+    level:4,
     color:'#3B82F6'
   },
   {
-    level:'warn',
+    label:'warn',
+    level:5,
     color:'#F59E0B'
   },
   {
-    level:'error',
+    label:'error',
+    level:6,
     color:'#EF4444'
   },
   {
-    level:'fatal',
+    label:'fatal',
+    level:7,
     color:'#000000'
   }
 ])
-const targetLogLevel = ref('debug')
+const targetLogLevel = ref(3)
+const searchTarget = ref('')
 
-const getColor = (level:string)=>{
+const getColor = (level:number)=>{
   switch (level) {
-    case 'error':
+    case Priority.WARN:
+      return '#F59E0B'
+    case Priority.ERROR:
       return '#EF4444'
-    case 'fatal':
+    case Priority.FATAL:
       return '#EF4444'
     default:
       return 'white'
@@ -86,7 +97,6 @@ const logCatInfo = reactive({
   list:logList
 })
 const maxLength = 10000
-const searchTarget = ref('')
 const client = CustomAdbClient.getClient()
 const deviceStore = DeviceStore()
 let reader:any
@@ -99,10 +109,25 @@ const startLogcat = async ()=>{
       showClose:true,
     })
   }
+  if(reader){
+    (reader as LogcatReader).end()
+  }
+
   // 清理logcat缓存
+  console.log("清理logcat缓存")
   await client.execDevice(deviceStore.CurrentDevice.id,"logcat -c")
   await client.openLogcat(deviceStore.CurrentDevice.id)
   reader = await client.openLogcat(deviceStore.CurrentDevice.id)
+
+  console.log("设置level:",targetLogLevel.value)
+  reader.setFilter((entry:any)=>{
+    return entry.prioritiy >= targetLogLevel.value
+  })
+
+  console.log("设置筛选:",searchTarget.value)
+  reader.setFilter((entry:any)=>{
+    return entry.message.includes(searchTarget.value)
+  })
 
   reader.on('entry',(entry:LogcatEntry)=>{
     if(logCatInfo.list.length>=maxLength){
