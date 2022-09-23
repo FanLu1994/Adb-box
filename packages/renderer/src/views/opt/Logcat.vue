@@ -3,6 +3,7 @@
     <div class="flex">
       <el-button @click="startLogcat">开启日志</el-button>
       <el-button @click="stopLogcat">关闭日志</el-button>
+      <el-button @click="clearLogcat">清空日志</el-button>
       <el-select v-model="targetLogLevel" @change="startLogcat">
         <el-option v-for="(item,index) in logLevel"
                    :key="item.level"
@@ -17,10 +18,10 @@
                 placeholder="请输入筛选内容" class="w-1/4"
                 @change="startLogcat"></el-input>
     </div>
-    <div class="logcat-window">
+    <div class="logcat-window text-base leading-5">
       <p v-for="(entry,index) in logCatInfo.list" :style="{color:getColor(entry.priority)}">
         {{dateFormat(entry.date)}}
-        {{entry.priority}}
+        {{getLabel(entry.priority)}}
         {{entry.message}}
       </p>
     </div>
@@ -43,6 +44,16 @@ interface CustomLevel{
 }
 
 const logLevel = ref([
+  {
+    label:'default',
+    level:1,
+    color:'#10B981'
+  },
+  {
+    label:'verbose',
+    level:2,
+    color:'#10B981'
+  },
   {
     label:'debug',
     level:3,
@@ -72,6 +83,7 @@ const logLevel = ref([
 const targetLogLevel = ref(3)
 const searchTarget = ref('')
 
+// 不同颜色区分日志
 const getColor = (level:number)=>{
   switch (level) {
     case Priority.WARN:
@@ -82,6 +94,30 @@ const getColor = (level:number)=>{
       return '#EF4444'
     default:
       return 'white'
+  }
+}
+
+// 日志级别转换为
+const getLabel = (level:number)=>{
+  switch (level) {
+    case Priority.DEFAULT:
+      return 'DEFAULT'
+    case Priority.VERBOSE:
+      return 'VERBOSE'
+    case Priority.DEBUG:
+      return 'DEBUG'
+    case Priority.INFO:
+      return 'INFO'
+    case Priority.WARN:
+      return 'WARN'
+    case Priority.ERROR:
+      return 'ERROR'
+    case Priority.FATAL:
+      return 'FATAL'
+    case Priority.SILENT:
+      return 'SILENT'
+    default:
+      return level
   }
 }
 
@@ -141,6 +177,10 @@ const stopLogcat = ()=>{
   if(reader) {
     (reader as LogcatReader).end()
   }
+}
+
+const clearLogcat = ()=>{
+  logCatInfo.list = []
 }
 
 // 设定级别
