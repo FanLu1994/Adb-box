@@ -30,35 +30,18 @@
         v-loading="installLoading"
         width="50%"
     >
-      <el-upload
-          v-model:file-list="apkList"
-          class="upload-demo"
-          :auto-upload="false"
-          drag
-          :show-file-list="true"
-          :on-change="handlePreview"
-          :on-remove="handleRemove"
-          accept=".apk"
-          :limit="1"
-      >
-        <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-        <div class="el-upload__text">
-         拖动文件或者 <em>点击</em>
-        </div>
-        <template #tip>
-          <div class="el-upload__tip">
-            仅支持apk文件
+      <div ref="dropZoneRef" class="flex flex-col w-full min-h-200px h-auto bg-gray-400/10 justify-center items-center mt-6">
+        <div> isOverDropZone: <BooleanDisplay :value="isOverDropZone" /></div>
+        <div class="flex flex-wrap justify-center items-center">
+          <div v-for="(file, index) in filesData" :key="index" class="w-200px bg-black-200/10 ma-2 pa-6">
+            <p>Name: {{ file.name }}</p>
+            <p>path: {{ file.path }}</p>
+            <p>Size: {{ file.size }}</p>
+            <p>Type: {{ file.type }}</p>
+            <p>Last modified: {{ file.lastModified }}</p>
           </div>
-        </template>
-      </el-upload>
-      <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="uploadDialogVisiable = false">取消</el-button>
-        <el-button type="primary" @click="onInstallApp"
-        >确定</el-button
-        >
-      </span>
-      </template>
+        </div>
+      </div>
     </el-dialog>
   </div>
 
@@ -71,6 +54,7 @@ import {onMounted, reactive, ref, unref} from "vue";
 import {CustomAdbClient} from "../../utils/adbClient";
 import {DeviceStore} from "../../store/DeviceStore";
 import {ElMessage, install, UploadProps, UploadUserFile} from "element-plus";
+import {useDropZone} from "@vueuse/core";
 
 const deviceStore = DeviceStore()
 const client = CustomAdbClient.getClient()
@@ -125,22 +109,45 @@ const uninstallApp = (row:Package)=>{
   RefreshAppList()
 }
 
-// 上传文件相关钩子
-const apkList=ref<UploadUserFile[]>([])
-const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {
-  console.log(file, uploadFiles)
+// 上传相关组件
+const filesData = ref<{
+  name: string;
+  size: number;
+  type: string;
+  path: string;
+  lastModified: number }[]>([])
+function onDrop(files: File[] | null) {
+  filesData.value = []
+
+  // 判断是否是一个apk文件
+  if(files && files.length==1 && files[0].name.endsWith('.apk')){
+    // 安装文件
+    onInstallApp(files[0].path)
+  }else{
+    ElMessage.error({
+      message:'err',
+      duration:1000,
+    })
+  }
+
+  if (files) {
+    console.log(files)
+    filesData.value = files.map(file => ({
+      name: file.name,
+      size: file.size,
+      path: file.path,
+      type: file.type,
+      lastModified: file.lastModified,
+    }))
+  }
 }
 
-const handlePreview: UploadProps['onPreview'] = (uploadFile) => {
-  console.log(uploadFile)
-  // onInstallApp()
-}
+const dropZoneRef = ref<HTMLElement>()
+const {isOverDropZone} = useDropZone(dropZoneRef,onDrop)
 
-
-const onInstallApp = ()=>{
+const onInstallApp = (apkPath:string)=>{
   installLoading.value = true
-  console.log(unref(apkList)[0].raw?.path)
-  client.install(deviceStore.CurrentDevice.id,unref(apkList)[0].raw?.path as string,(err)=>{
+  client.install(deviceStore.CurrentDevice.id,apkPath,(err)=>{
     console.log(err)
     if(err){
       ElMessage.error({
@@ -158,9 +165,10 @@ const onInstallApp = ()=>{
 
     installLoading.value = false
     uploadDialogVisiable.value = false
-    apkList.value.splice(0,apkList.value.length)
   })
 }
+
+
 
 onMounted( ()=>{
  RefreshAppList()
