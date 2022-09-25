@@ -122,10 +122,10 @@ onMounted(async ()=>{
 
 </script>
 
-<style scoped>
+<style scoped lang="less">
 
 .xterm-container{
-  padding: 0 5px;
+  padding: 5px 5px 20px 5px;
   margin: 0 4px;
   border-radius: 5px;
   background: #2c3e50;
@@ -134,7 +134,7 @@ onMounted(async ()=>{
 }
 
 .xterm{
-  height: 600px;
+  height: calc(~"100vh - 160px");
 }
 
 </style>

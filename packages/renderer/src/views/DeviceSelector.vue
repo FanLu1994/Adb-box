@@ -1,6 +1,5 @@
 <template>
-  <div>
-    选择设备
+  <div class="flex items-center space-x-1 device-selector">
     <el-select v-model="currentDevice" @change="changeDevice">
       <el-option v-for="(device,index) in deviceList"
                  :key="index"
@@ -8,15 +7,20 @@
                 >
       </el-option>
     </el-select>
-    <el-button @click="">设备详情</el-button>
-  </div>
-  <div class="flex justify-between px-5 bg-red-400 text-white">
     <span>生产厂商:{{deviceInfo.brand}}</span>
     <span>内核版本:{{deviceInfo.sdk}}</span>
     <span>系统版本:{{deviceInfo.system}}</span>
     <span>设备名:{{deviceInfo.name}}</span>
     <span>cpu:{{deviceInfo.board}}</span>
+    <el-button @click="">设备详情</el-button>
   </div>
+<!--  <div class="flex justify-between px-5 bg-red-400 text-white">-->
+<!--    <span>生产厂商:{{deviceInfo.brand}}</span>-->
+<!--    <span>内核版本:{{deviceInfo.sdk}}</span>-->
+<!--    <span>系统版本:{{deviceInfo.system}}</span>-->
+<!--    <span>设备名:{{deviceInfo.name}}</span>-->
+<!--    <span>cpu:{{deviceInfo.board}}</span>-->
+<!--  </div>-->
 </template>
 
 <script lang="ts" setup>
@@ -62,6 +66,8 @@ const changeDevice = async (deviceId:any)=>{
 
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+.device-selector{
+  padding: 1px 2px 1px 2px;
+}
 </style>

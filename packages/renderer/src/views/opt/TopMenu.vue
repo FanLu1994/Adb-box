@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-full justify-center items-center">
+  <div class="flex w-full items-center menus">
     <div v-for="item in menu" class="menu-item" @click="onClickMenu(item)">
       {{item.title}}
     </div>
@@ -52,6 +52,10 @@ const onClickMenu = (menuItem:menuItem)=>{
   &:hover{
     background: #34D399;
   }
+}
+
+.menus{
+  padding: 1px 2px 2px 1px;
 }
 
 </style>

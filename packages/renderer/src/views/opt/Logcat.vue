@@ -208,13 +208,13 @@ const setSearchTarget = ()=>{
 
 .logcat-window{
   width: 100%;
-  height: 600px;
+  height: calc(~"100vh - 160px");
   margin-top: 2px;
   background: #2c3e50;
   border-radius: 5px;
   color:white;
   text-align: left;
-  padding: 0 5px;
+  padding: 5px 5px 20px 5px;
   overflow-y:scroll;
   cursor:text;
   user-select: text;

@@ -8,6 +8,11 @@
 
     <div class="flex justify-center items-center pb-5">
       <el-table :data="device.list" stripe  max-height="600" class="table" >
+        <el-table-column prop="label" label="icon" :min-width="10">
+          <template #default="scope">
+            <el-image :src="getIconAddr(scope.row.packageName)" class="w-5"></el-image>
+          </template>
+        </el-table-column>
         <el-table-column prop="label" label="包名" :min-width="10"/>
         <el-table-column prop="packageName" label="ID" :min-width="10"/>
         <el-table-column prop="mainActivity" label="主Activity"  :min-width="10"/>
@@ -58,16 +63,18 @@ import {useDropZone} from "@vueuse/core";
 
 const deviceStore = DeviceStore()
 const client = CustomAdbClient.getClient()
+let atxIP = ''
 const GetDeviceIP = async ()=>{
-  let ip = ""
-  let ipInfo = await client.getIpAddress(deviceStore.CurrentDevice.id)
-  let ipArray = ipInfo.split("\n")
-  if(ipArray.length>1){
-    ip =  ipInfo.split("\n")[1]
-  }else{
-    ip =  ipInfo.split("\n")[0]
+  if(atxIP===''){
+    let ipInfo = await client.getIpAddress(deviceStore.CurrentDevice.id)
+    let ipArray = ipInfo.split("\n")
+    if(ipArray.length>1){
+      atxIP =  ipInfo.split("\n")[1]
+    }else{
+      atxIP =  ipInfo.split("\n")[0]
+    }
   }
-  return ip
+  return atxIP
 }
 
 interface Package{
@@ -168,6 +175,11 @@ const onInstallApp = (apkPath:string)=>{
   })
 }
 
+const getIconAddr = (packageName:string)=>{
+  console.log(GetDeviceIP())
+  console.log(`http://${atxIP}:7912/packages/${packageName}/icon`)
+  return `http://${atxIP}:7912/packages/${packageName}/icon`
+}
 
 
 onMounted( ()=>{
@@ -180,7 +192,7 @@ onMounted( ()=>{
 .table{
   width: 100%;
   height: 100%;
-  margin: 1px 20px;
+  margin: 1px 5px;
   border-radius: 7px;
   background: #e0e0e0;
   box-shadow:  5px 5px 10px #9f9f9f,

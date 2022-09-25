@@ -1,4 +1,4 @@
-import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, shell, ipcMain,Menu } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
 
@@ -32,18 +32,23 @@ const preload = join(__dirname, '../preload/index.cjs')
 const url = `http://${process.env['VITE_DEV_SERVER_HOST']}:${process.env['VITE_DEV_SERVER_PORT']}`
 const indexHtml = join(ROOT_PATH.dist, 'index.html')
 
+
+
 async function createWindow() {
   win = new BrowserWindow({
     title: 'Adb-Box',
     icon: join(ROOT_PATH.public, 'favicon.ico'),
-    width:1400,
+    width:1200,
     height:800,
-    resizable:false,
+    resizable:true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
   })
+
+  /*隐藏electron创听的菜单栏*/
+  Menu.setApplicationMenu(null)
 
   if (app.isPackaged) {
     win.loadFile(indexHtml)

@@ -30,7 +30,7 @@ onMounted(()=>{
 </template>
 
 <style scoped lang="less">
-@import "@/assets/less/home.less";
+@import "./assets/less/home.less";
 
 </style>
 
