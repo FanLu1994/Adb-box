@@ -1,8 +1,11 @@
 <template>
-  <div class="flex w-full items-center menus">
-    <div v-for="item in menu" class="menu-item" @click="onClickMenu(item)">
-      {{item.title}}
+  <div class="flex justify-center	">
+    <div class="flex items-center  menus">
+      <div v-for="item in menu" class="menu-item" @click="onClickMenu(item)">
+        {{item.title}}
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -55,7 +58,13 @@ const onClickMenu = (menuItem:menuItem)=>{
 }
 
 .menus{
-  padding: 1px 2px 2px 1px;
+  padding: 3px 5px;
+  margin: 5px 5px;
+  width: 100%;
+  border-radius: 10px;
+  background: white;
+  //border:1px solid #e4e7ed;
+  box-shadow:0px 2px 10px rgba(0, 0, 0, .12);
 }
 
 </style>

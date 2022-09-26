@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import {AdbCommand, AdbStore} from "../../store/AdbStore";
-import {computed, reactive, ref, unref, watch} from "vue";
+import {computed, nextTick, onActivated, onMounted, reactive, ref, unref, watch} from "vue";
 import {DeviceStore} from "../../store/DeviceStore";
 import {CustomAdbClient} from "../../utils/adbClient";
 import {ElMessage, ElMessageBox} from "element-plus";
@@ -62,7 +62,6 @@ watch(deviceStore.CurrentDevice,()=>{
 
 // 执行shell命令
 const onExecAdbCmd = (adbcmd:AdbCommand)=>{
-  console.log(deviceStore.CurrentDevice)
   if(!deviceStore.CurrentDevice){
     ElMessage.error({
       message:'未选择任何设备',
@@ -78,7 +77,7 @@ const onExecAdbCmd = (adbcmd:AdbCommand)=>{
     type:'cmd',
     msg:`adb -s ${deviceStore.CurrentDevice.id} ${adbcmd.cmd}`,
   })
-  scrollToBottom()
+  nextTick(scrollToBottom)
 
   CustomAdbClient.execAdb(deviceStore.CurrentDevice.id,adbcmd.cmd,(err,res)=>{
     if(err){
@@ -99,8 +98,13 @@ const onExecAdbCmd = (adbcmd:AdbCommand)=>{
 const atBottom = true // 是否在bottom位置
 const scrollToBottom = ()=>{
   const ele = document.getElementById('adb-terminal')!
-  console.log(ele)
-  ele.scrollTop = ele.clientHeight
+  // 当前滚动条在底部修改滚动条位置
+  if (atBottom) {
+    // 新消息渲染完成，修改滚动条位置
+    ele.scrollTop = ele.scrollHeight+100
+  }
+  console.log("实际高度：",ele.scrollHeight)
+  console.log("滚动高度：",ele.scrollTop)
 }
 
 const onSwitchDevice = ()=>{
@@ -138,7 +142,6 @@ const addCmdToList = ()=>{
 // 长按删除
 let counter = setInterval(()=>{});
 const onLongPress = (title:string)=>{
-  console.log(title)
   let timeStart = new Date().getTime()
   counter = setInterval(()=>{
     let timeNow = new Date().getTime()
@@ -155,20 +158,25 @@ const mouseUp = ()=>{
 
 // 删除cmd
 const delcmd = (title:string)=>{
-  ElMessageBox.confirm(
-      '确定删除？',
-      {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-  )
-      .then(() => {
-       adbStore.RemoveCommand(title)
-      })
-      .catch(() => {
-      })
+  // ElMessageBox.confirm(
+  //     (
+  //         mess
+  //     )
+  // )
+  //     .then(() => {
+  //      adbStore.RemoveCommand(title)
+  //     })
+  //     .catch(() => {
+  //     })
 }
+
+onActivated(()=>{
+  scrollToBottom()
+})
+
+onMounted(()=>{
+  scrollToBottom()
+})
 
 </script>
 

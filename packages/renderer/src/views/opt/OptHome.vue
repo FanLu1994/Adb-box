@@ -1,6 +1,6 @@
 <template>
   <div class="opt-container">
-    <TopMenu></TopMenu>
+    <TopMenu class="menu"></TopMenu>
 <!--    <router-view></router-view>-->
     <router-view v-slot="{ Component }">
       <keep-alive>
@@ -21,5 +21,9 @@ import TopMenu from "@/views/opt/TopMenu.vue";
   width: 100%;
   overflow: hidden;
 }
+
+//.menu{
+//  width: 98%;
+//}
 
 </style>
