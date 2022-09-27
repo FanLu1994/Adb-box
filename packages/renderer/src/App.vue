@@ -65,4 +65,9 @@ onMounted(()=>{
   border-radius: 4px;
   color: #304455;
 }
+
+.home{
+  background: #ECFDF5;
+}
+
 </style>

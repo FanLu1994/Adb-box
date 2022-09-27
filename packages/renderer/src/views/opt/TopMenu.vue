@@ -2,6 +2,7 @@
   <div class="flex justify-center	">
     <div class="flex items-center  menus">
       <div v-for="item in menu" class="menu-item" @click="onClickMenu(item)">
+        <el-icon><Notification /></el-icon>
         {{item.title}}
       </div>
     </div>
@@ -12,6 +13,7 @@
 <script lang="ts" setup>
 
 import {useRouter} from "vue-router";
+import {Notification} from '@element-plus/icons-vue'
 
 interface menuItem{
   title:string,
@@ -46,14 +48,15 @@ const onClickMenu = (menuItem:menuItem)=>{
 
 <style scoped lang="less">
 .menu-item{
-  border: 1px solid #eeeeee;
   padding: 2px 5px;
   width: 100px;
-  background: #10B981;
-  color:white;
   border-radius: 0px;
+  display: flex;
+  align-items: center;
   &:hover{
     background: #34D399;
+    color: white;
+    border-radius: 5px;
   }
 }
 

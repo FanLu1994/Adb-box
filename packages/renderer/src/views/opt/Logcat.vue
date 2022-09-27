@@ -18,7 +18,7 @@
                 placeholder="请输入筛选内容" class="w-1/4"
                 @change="startLogcat"></el-input>
     </div>
-    <div class="logcat-window text-base leading-5">
+    <div class="logcat-window text-base leading-5" id="logcat">
       <p v-for="(entry,index) in logCatInfo.list" :style="{color:getColor(entry.priority)}">
         {{dateFormat(entry.date)}}
         {{getLabel(entry.priority)}}
@@ -170,6 +170,7 @@ const startLogcat = async ()=>{
       logCatInfo.list.splice(0,1)
     }
     logCatInfo.list.push(entry)
+    scrollToBottom()
   })
 }
 
@@ -197,6 +198,17 @@ const setSearchTarget = ()=>{
   })
 }
 
+const atBottom = true // 是否在bottom位置
+const scrollToBottom = ()=>{
+  const ele = document.getElementById('logcat')!
+  // 当前滚动条在底部修改滚动条位置
+  if (atBottom) {
+    // 新消息渲染完成，修改滚动条位置
+    ele.scrollTop = ele.scrollHeight+100
+  }
+  console.log("实际高度：",ele.scrollHeight)
+  console.log("滚动高度：",ele.scrollTop)
+}
 
 </script>
 

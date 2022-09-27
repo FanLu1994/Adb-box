@@ -7,11 +7,14 @@
                 >
       </el-option>
     </el-select>
-    <span>生产厂商:{{deviceInfo.brand}}</span>
-    <span>内核版本:{{deviceInfo.sdk}}</span>
-    <span>系统版本:{{deviceInfo.system}}</span>
-    <span>设备名:{{deviceInfo.name}}</span>
-    <span>cpu:{{deviceInfo.board}}</span>
+    <div class="device-simple-info space-x-2" v-show="currentDevice!=null">
+      <span>生产厂商:{{deviceInfo.brand}}</span>
+      <span>内核版本:{{deviceInfo.sdk}}</span>
+      <span>系统版本:{{deviceInfo.system}}</span>
+      <span>设备名:{{deviceInfo.name}}</span>
+      <span>cpu:{{deviceInfo.board}}</span>
+    </div>
+
     <el-button @click="">设备详情</el-button>
   </div>
 <!--  <div class="flex justify-between px-5 bg-red-400 text-white">-->
@@ -70,4 +73,9 @@ const changeDevice = async (deviceId:any)=>{
 .device-selector{
   padding: 1px 2px 1px 2px;
 }
+
+.device-simple-info{
+  color:#6B7280;
+}
+
 </style>

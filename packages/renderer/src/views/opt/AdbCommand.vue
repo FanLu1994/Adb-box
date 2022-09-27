@@ -183,11 +183,11 @@ onMounted(()=>{
 <style scoped lang="less">
 .adb-cmd-container{
   display: flex;
-  padding: 10px 10px;
+  padding: 2px 2px;
   height: 100px;
   //background: #D1D5DB;
   border:1px solid #e4e7ed;
-  margin: 5px 5px;
+  margin: 1px 5px;
   border-radius: 10px;
   background: white;
   box-shadow:  6px 6px 12px #bebebe,
