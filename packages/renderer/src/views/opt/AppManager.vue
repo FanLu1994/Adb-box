@@ -53,7 +53,6 @@
 </template>
 
 <script setup lang="ts">
-import { UploadFilled } from '@element-plus/icons-vue'
 import {GetAppList} from "../../utils/api";
 import {onMounted, reactive, ref, unref} from "vue";
 import {CustomAdbClient} from "../../utils/adbClient";
@@ -65,16 +64,7 @@ const deviceStore = DeviceStore()
 const client = CustomAdbClient.getClient()
 let atxIP = ''
 const GetDeviceIP = async ()=>{
-  if(atxIP===''){
-    let ipInfo = await client.getIpAddress(deviceStore.CurrentDevice.id)
-    let ipArray = ipInfo.split("\n")
-    if(ipArray.length>1){
-      atxIP =  ipInfo.split("\n")[1]
-    }else{
-      atxIP =  ipInfo.split("\n")[0]
-    }
-  }
-  return atxIP
+  return await CustomAdbClient.GetCurrentDeviceIP()
 }
 
 interface Package{

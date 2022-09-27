@@ -40,6 +40,7 @@ async function createWindow() {
     icon: join(ROOT_PATH.public, 'favicon.ico'),
     width:1200,
     height:800,
+    minWidth:1100,
     resizable:true,
     webPreferences: {
       nodeIntegration: true,

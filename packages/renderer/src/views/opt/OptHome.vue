@@ -20,6 +20,7 @@ import TopMenu from "@/views/opt/TopMenu.vue";
 .opt-container{
   width: 100%;
   overflow: hidden;
+  overflow-y: hidden;
 }
 
 //.menu{

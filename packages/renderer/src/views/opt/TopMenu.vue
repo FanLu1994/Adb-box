@@ -1,8 +1,8 @@
 <template>
   <div class="flex justify-center	">
     <div class="flex items-center  menus">
-      <div v-for="item in menu" class="menu-item" @click="onClickMenu(item)">
-        <el-icon><Notification /></el-icon>
+      <div v-for="item in menu" class="menu-item space-x-2" @click="onClickMenu(item)">
+        <el-icon><Folder /></el-icon>
         {{item.title}}
       </div>
     </div>
@@ -13,7 +13,7 @@
 <script lang="ts" setup>
 
 import {useRouter} from "vue-router";
-import {Notification} from '@element-plus/icons-vue'
+import {Notification,Folder} from '@element-plus/icons-vue'
 
 interface menuItem{
   title:string,
@@ -52,6 +52,7 @@ const onClickMenu = (menuItem:menuItem)=>{
   width: 100px;
   border-radius: 0px;
   display: flex;
+  justify-content: center;
   align-items: center;
   &:hover{
     background: #34D399;

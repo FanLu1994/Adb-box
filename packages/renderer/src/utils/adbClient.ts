@@ -77,7 +77,12 @@ export class CustomAdbClient {
     }
 
 
-    async GetCurrentDeviceIP(deviceID:string){
+    static async GetCurrentDeviceIP(deviceID?:string){
+        if(!deviceID){
+            const deviceStore = DeviceStore()
+            deviceID = deviceStore.CurrentDevice.id
+        }
+
         const client = CustomAdbClient.getClient()
         let ip = await client.getIpAddress(deviceID)
         let ipArray = ip.split("\n")

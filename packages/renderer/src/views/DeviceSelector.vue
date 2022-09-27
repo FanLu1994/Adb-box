@@ -1,21 +1,22 @@
 <template>
   <div class="flex items-center space-x-1 device-selector">
-    <el-select v-model="currentDevice" @change="changeDevice">
+    <el-select v-model="currentDevice" @change="changeDevice" class="selector" size="large">
       <el-option v-for="(device,index) in deviceList"
                  :key="index"
                 :label="`${device.product}-${device.model}`" :value="device.id"
                 >
       </el-option>
     </el-select>
-    <div class="device-simple-info space-x-2" v-show="currentDevice!=null">
-      <span>生产厂商:{{deviceInfo.brand}}</span>
-      <span>内核版本:{{deviceInfo.sdk}}</span>
-      <span>系统版本:{{deviceInfo.system}}</span>
-      <span>设备名:{{deviceInfo.name}}</span>
-      <span>cpu:{{deviceInfo.board}}</span>
+    <div class="device-simple-info space-x-4" v-show="currentDevice!=null">
+      <span>设备名: {{deviceInfo.name}}</span>
+<!--      <span>生产厂商: {{deviceInfo.brand}}</span>-->
+      <span>内核版本: {{deviceInfo.sdk}}</span>
+      <span>安卓版本: {{deviceInfo.system}}</span>
+<!--      <span>CPU: {{deviceInfo.board}}</span>-->
+      <el-icon><View /></el-icon>
     </div>
 
-    <el-button @click="">设备详情</el-button>
+
   </div>
 <!--  <div class="flex justify-between px-5 bg-red-400 text-white">-->
 <!--    <span>生产厂商:{{deviceInfo.brand}}</span>-->
@@ -31,6 +32,7 @@ import {DeviceStore} from "../store/DeviceStore";
 import {computed, reactive, ref} from "vue";
 import {CustomAdbClient} from "../utils/adbClient";
 import {monitor} from "../utils/monitor";
+import {View} from '@element-plus/icons-vue'
 
 const deviceStore = DeviceStore()
 
@@ -75,7 +77,10 @@ const changeDevice = async (deviceId:any)=>{
 }
 
 .device-simple-info{
-  color:#6B7280;
+  color:black;
+  display: flex;
+  align-items: center;
 }
+
 
 </style>

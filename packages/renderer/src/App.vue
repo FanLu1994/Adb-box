@@ -68,6 +68,8 @@ onMounted(()=>{
 
 .home{
   background: #ECFDF5;
+  overflow-y: hidden;
+  font-font: "Times New Roman","Microsoft YaHei";
 }
 
 </style>

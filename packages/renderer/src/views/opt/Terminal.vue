@@ -24,17 +24,6 @@ let term;
 let websocket;
 const deviceStore = DeviceStore()
 const client = CustomAdbClient.getClient()
-const GetDeviceIP = async ()=>{
-  let ip = ""
-  let ipInfo = await client.getIpAddress(deviceStore.CurrentDevice.id)
-  let ipArray = ipInfo.split("\n")
-  if(ipArray.length>1){
-    ip =  ipInfo.split("\n")[1]
-  }else{
-    ip =  ipInfo.split("\n")[0]
-  }
-  return ip
-}
 
 // 处理数据
 const ab2str = (buf)=> {
@@ -52,7 +41,7 @@ const initSocket = async () => {
     term.dispose()
   }
 
-  websocket = new WebSocket("ws://" + await GetDeviceIP() + ":7912/term")
+  websocket = new WebSocket("ws://" + await CustomAdbClient.GetCurrentDeviceIP() + ":7912/term");
   websocket.binaryType = 'arraybuffer'
 
   websocket.onopen = function(evt) {
