@@ -1,9 +1,9 @@
 <template>
   <div class="log-container">
     <div class="flex">
-      <el-button @click="startLogcat">开启日志</el-button>
-      <el-button @click="stopLogcat">关闭日志</el-button>
-      <el-button @click="clearLogcat">清空日志</el-button>
+<!--      <el-button @click="startLogcat">开启日志</el-button>-->
+<!--      <el-button @click="stopLogcat">关闭日志</el-button>-->
+<!--      <el-button @click="clearLogcat">清空日志</el-button>-->
       <el-select v-model="targetLogLevel" @change="startLogcat">
         <el-option v-for="(item,index) in logLevel"
                    :key="item.level"
@@ -25,6 +25,18 @@
         {{entry.message}}
       </p>
     </div>
+
+    <div class="operation-btns">
+      <div>
+        <el-icon color="white" size="30px"><CaretRight /></el-icon>
+      </div>
+      <div>
+        <el-icon color="white" size="30px"><VideoPause /></el-icon>
+      </div>
+      <div>
+        <el-icon color="white" size="30px"><Delete /></el-icon>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -36,6 +48,7 @@ import {ElMessage} from "element-plus";
 import LogcatReader from "adb-ts/lib/logcat/reader";
 import {Priority} from "adb-ts";
 import LogcatEntry from "adb-ts/lib/logcat/entry";
+import {CaretRight,VideoPause,Delete} from "@element-plus/icons-vue"
 
 interface CustomLevel{
   label:string,
@@ -214,13 +227,13 @@ const scrollToBottom = ()=>{
 
 <style scoped lang="less">
 .log-container{
-  padding: 5px 10px;
+  padding: 0 10px 20px 10px;
 }
 
 
 .logcat-window{
   width: 100%;
-  height: calc(~"100vh - 160px");
+  height: calc(~"100vh - 140px");
   margin-top: 2px;
   background: #2c3e50;
   border-radius: 5px;
@@ -232,6 +245,18 @@ const scrollToBottom = ()=>{
   user-select: text;
   box-shadow:  6px 6px 12px #bebebe,
     -6px -6px 12px #ffffff;
+}
+
+.operation-btns{
+  position: absolute;
+  right: 10px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  --tw-space-y-reverse: 1;
+  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+
 }
 
 </style>

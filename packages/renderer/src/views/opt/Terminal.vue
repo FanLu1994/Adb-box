@@ -1,10 +1,17 @@
 <template>
   <div>
-    <el-button @click="initSocket">刷新</el-button>
+<!--    <el-button @click="initSocket">刷新</el-button>-->
     <div class="xterm-container">
       <div id="xterm" class="xterm" />
     </div>
 
+    <div class="operation-btns">
+      <el-icon color="white"
+               size="30px"
+               title="重启终端"
+               @click="initSocket"><RefreshRight /></el-icon>
+
+    </div>
 
   </div>
 
@@ -18,6 +25,7 @@ import {AttachAddon} from 'xterm-addon-attach'
 import {onMounted} from "vue";
 import {DeviceStore} from "../../store/DeviceStore";
 import {CustomAdbClient} from "../../utils/adbClient";
+import {RefreshRight} from "@element-plus/icons-vue"
 
 // 初始化终端
 let term;
@@ -123,7 +131,13 @@ onMounted(async ()=>{
 }
 
 .xterm{
-  height: calc(~"100vh - 160px");
+  height: calc(~"100vh - 120px");
+}
+
+.operation-btns{
+  position: absolute;
+  right: 5px;
+  bottom: 10px;
 }
 
 </style>
