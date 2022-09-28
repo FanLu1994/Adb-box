@@ -2,6 +2,12 @@
   <div class="screen-container">
     <canvas id="canvas" style="width: 320px;padding: 5px">
     </canvas>
+
+    <div class="reconnect">
+      <el-icon color="#000000"
+               size="30px"
+               @click="initMinicap"><RefreshRight /></el-icon>
+    </div>
   </div>
 </template>
 
@@ -9,11 +15,12 @@
 
 // 启动minicap
 import {ElMessage} from "element-plus";
-import {port} from "../utils/monitor";
+import {monitor, port} from "../utils/monitor";
 import bus from "../utils/bus";
 import {onMounted} from "vue";
 import {DeviceStore} from "../store/DeviceStore";
 import {CustomAdbClient} from "../utils/adbClient";
+import {RefreshRight} from "@element-plus/icons-vue";
 
 const deviceStore = DeviceStore()
 const client = CustomAdbClient.getClient()
@@ -69,6 +76,9 @@ const startMinicap = async ()=>{
   }
 }
 
+const initMinicap = ()=>{
+  monitor.StartMonitor(deviceStore.CurrentDevice.id)
+}
 
 onMounted(()=>{
   bus.on('init-finished',()=>{
@@ -91,6 +101,13 @@ onMounted(()=>{
   background: #e0e0e0;
   box-shadow:  6px 6px 12px #bebebe,
     -6px -6px 12px #ffffff;
+}
+
+.reconnect{
+  position: absolute;
+  color: #34D399;
+  left:20px;
+  bottom: 50px;
 }
 
 </style>

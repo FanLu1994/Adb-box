@@ -22,20 +22,22 @@
       <el-button type="primary" @click="onExecAdbCmd(inputCmd)">执行</el-button>
       <el-button type="primary" @click="addCmdToList">添加到常用</el-button>
     </div>
-    <div class="adb-terminal" id="adb-terminal">
+    <div class="adb-terminal" id="adb-terminal" ref="el">
       <p v-for="(adbMsg,index) in msgList" :key="index" :class="`${adbMsg.type}-msg`">
         $ {{adbMsg.msg}}
       </p>
+      <div id="bottom-div"></div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import {AdbCommand, AdbStore} from "../../store/AdbStore";
-import {computed, nextTick, onActivated, onMounted, reactive, ref, unref, watch} from "vue";
+import {computed, nextTick, onActivated, onMounted, reactive, ref, toRefs, unref, watch} from "vue";
 import {DeviceStore} from "../../store/DeviceStore";
 import {CustomAdbClient} from "../../utils/adbClient";
 import {ElMessage, ElMessageBox} from "element-plus";
+import {useScroll} from "@vueuse/core";
 
 const adbStore = AdbStore()
 const deviceStore = DeviceStore()
@@ -92,19 +94,37 @@ const onExecAdbCmd = (adbcmd:AdbCommand)=>{
         msg:res,
       })
     }
+    nextTick(scrollToBottom)
   })
 }
 
-const atBottom = true // 是否在bottom位置
+// 滚动相关
+const el = ref<HTMLElement | null>(null)
+const { x, y, isScrolling, arrivedState, directions } = useScroll(el)
+const { left, right, top, bottom } = toRefs(arrivedState)
+const { left: toLeft, right: toRight, top: toTop, bottom: toBottom } = toRefs(directions)
+
+watch(toTop,()=>{
+  scrollToTop.value = true
+})
+
+watch(bottom,()=>{
+  scrollToTop.value  = false
+})
+
+const scrollToTop = ref(false)
 const scrollToBottom = ()=>{
   const ele = document.getElementById('adb-terminal')!
+
+  console.log('left',unref(left))
+  console.log('right',unref(right))
+  console.log('top',unref(top))
+  console.log('bottom',unref(bottom))
   // 当前滚动条在底部修改滚动条位置
-  if (atBottom) {
+  if (!unref(scrollToTop)) {
     // 新消息渲染完成，修改滚动条位置
-    ele.scrollTop = ele.scrollHeight+100
+    ele.scrollTop = ele.scrollHeight
   }
-  console.log("实际高度：",ele.scrollHeight)
-  console.log("滚动高度：",ele.scrollTop)
 }
 
 const onSwitchDevice = ()=>{
@@ -121,7 +141,6 @@ const addCmdToList = ()=>{
   if(inputCmd.cmd===""){
     return
   }
-
   ElMessageBox.prompt('请输入命令名', '提示', {
     confirmButtonText: '确认',
     cancelButtonText: '取消',
@@ -171,6 +190,7 @@ const delcmd = (title:string)=>{
 }
 
 onActivated(()=>{
+  scrollToTop.value = false
   scrollToBottom()
 })
 
@@ -183,7 +203,7 @@ onMounted(()=>{
 <style scoped lang="less">
 .adb-cmd-container{
   display: flex;
-  padding: 2px 2px;
+  padding: 2px 5px 2px 5px;
   height: 100px;
   //background: #D1D5DB;
   border:1px solid #e4e7ed;
@@ -222,10 +242,11 @@ onMounted(()=>{
     color:white;
     text-align: left;
     padding-top: 5px;
-    padding-bottom: 30px;
+    padding-bottom: 0;
     overflow-y:scroll;
     cursor:text;
     user-select: text;
+    overflow-y: scroll;
     box-shadow:  6px 6px 12px #bebebe,
       -6px -6px 12px #ffffff;
     scroll-behavior: smooth;
