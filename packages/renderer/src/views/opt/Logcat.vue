@@ -18,7 +18,7 @@
                 placeholder="请输入筛选内容" class="w-1/4"
                 @change="startLogcat"></el-input>
     </div>
-    <div class="logcat-window text-base leading-5" id="logcat">
+    <div class="logcat-window text-base leading-5" id="logcat" ref="el">
       <p v-for="(entry,index) in logCatInfo.list" :style="{color:getColor(entry.priority)}">
         {{dateFormat(entry.date)}}
         {{getLabel(entry.priority)}}
@@ -28,20 +28,20 @@
 
     <div class="operation-btns">
       <div>
-        <el-icon color="white" size="30px"><CaretRight /></el-icon>
+        <el-icon color="white" size="30px" @click="startLogcat"><CaretRight /></el-icon>
       </div>
       <div>
-        <el-icon color="white" size="30px"><VideoPause /></el-icon>
+        <el-icon color="white" size="30px" @click="stopLogcat"><VideoPause /></el-icon>
       </div>
       <div>
-        <el-icon color="white" size="30px"><Delete /></el-icon>
+        <el-icon color="white" size="30px" @click="clearLogcat"><Delete /></el-icon>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {reactive, ref} from "vue";
+import {onActivated, onMounted, reactive, ref, toRefs, unref, watch} from "vue";
 import {CustomAdbClient} from "../../utils/adbClient";
 import {DeviceStore} from "../../store/DeviceStore";
 import {ElMessage} from "element-plus";
@@ -49,6 +49,7 @@ import LogcatReader from "adb-ts/lib/logcat/reader";
 import {Priority} from "adb-ts";
 import LogcatEntry from "adb-ts/lib/logcat/entry";
 import {CaretRight,VideoPause,Delete} from "@element-plus/icons-vue"
+import {useScroll} from "@vueuse/core";
 
 interface CustomLevel{
   label:string,
@@ -211,17 +212,38 @@ const setSearchTarget = ()=>{
   })
 }
 
-const atBottom = true // 是否在bottom位置
+// 滚动相关
+const el = ref<HTMLElement | null>(null)
+const { x, y, isScrolling, arrivedState, directions } = useScroll(el)
+const { left, right, top, bottom } = toRefs(arrivedState)
+const { left: toLeft, right: toRight, top: toTop, bottom: toBottom } = toRefs(directions)
+
+watch(toTop,()=>{
+  scrollToTop.value = true
+})
+
+watch(bottom,()=>{
+  scrollToTop.value  = false
+})
+
+const scrollToTop = ref(false)
 const scrollToBottom = ()=>{
   const ele = document.getElementById('logcat')!
   // 当前滚动条在底部修改滚动条位置
-  if (atBottom) {
+  if (!unref(scrollToTop)) {
     // 新消息渲染完成，修改滚动条位置
-    ele.scrollTop = ele.scrollHeight+100
+    ele.scrollTop = ele.scrollHeight
   }
-  console.log("实际高度：",ele.scrollHeight)
-  console.log("滚动高度：",ele.scrollTop)
 }
+
+onActivated(()=>{
+  scrollToTop.value = false
+  scrollToBottom()
+})
+
+onMounted(()=>{
+  scrollToBottom()
+})
 
 </script>
 
@@ -249,6 +271,7 @@ const scrollToBottom = ()=>{
 
 .operation-btns{
   position: absolute;
+  cursor: pointer;
   right: 10px;
   bottom: 12px;
   display: flex;

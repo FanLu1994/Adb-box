@@ -116,10 +116,6 @@ const scrollToTop = ref(false)
 const scrollToBottom = ()=>{
   const ele = document.getElementById('adb-terminal')!
 
-  console.log('left',unref(left))
-  console.log('right',unref(right))
-  console.log('top',unref(top))
-  console.log('bottom',unref(bottom))
   // 当前滚动条在底部修改滚动条位置
   if (!unref(scrollToTop)) {
     // 新消息渲染完成，修改滚动条位置

@@ -1,6 +1,6 @@
 <template>
   <div class="app-manager-container">
-    <div class="flex items-center justify-end pr-5 mb-2">
+    <div class="operate-btn">
       <el-button @click="RefreshAppList" type="primary">刷新</el-button>
       <el-button @click="uploadDialogVisiable = true" type="primary">安装应用</el-button>
     </div>
@@ -10,7 +10,14 @@
       <el-table :data="device.list" stripe  max-height="600" class="table" >
         <el-table-column prop="label" label="icon" :min-width="10">
           <template #default="scope">
-            <el-image :src="getIconAddr(scope.row.packageName)" class="w-5"></el-image>
+            <el-image :src="getIconAddr(scope.row.packageName)" class="icon" fit="fill">
+              <template #error>
+                <div class="image-slot">
+                  <el-icon><Picture /></el-icon>
+                </div>
+              </template>
+            </el-image>
+
           </template>
         </el-table-column>
         <el-table-column prop="label" label="包名" :min-width="10"/>
@@ -59,12 +66,14 @@ import {CustomAdbClient} from "../../utils/adbClient";
 import {DeviceStore} from "../../store/DeviceStore";
 import {ElMessage, install, UploadProps, UploadUserFile} from "element-plus";
 import {useDropZone} from "@vueuse/core";
+import {Picture} from "@element-plus/icons-vue";
 
 const deviceStore = DeviceStore()
 const client = CustomAdbClient.getClient()
 let atxIP = ''
 const GetDeviceIP = async ()=>{
-  return await CustomAdbClient.GetCurrentDeviceIP()
+  atxIP = await CustomAdbClient.GetCurrentDeviceIP()
+  return atxIP
 }
 
 interface Package{
@@ -191,6 +200,17 @@ onMounted( ()=>{
 
 .app-manager-container{
   width: 100%;
+}
+
+.icon{
+  height: 40px;
+  border-radius: 5px;
+}
+
+.operate-btn{
+  position: absolute;
+  right: 10px;
+  bottom: 20px;
 }
 
 </style>
