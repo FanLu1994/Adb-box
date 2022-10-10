@@ -137,8 +137,14 @@ const getLabel = (level:number)=>{
 
 const dateFormat = (rawDate:string)=>{
   const date = new Date(rawDate)
-  const res = date.getFullYear()+'-'+date.getMonth()+'-'+date.getDate()+
-      ' '+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+  const month = date.getMonth()>9?date.getMonth():'0'+date.getMonth()
+  const day = date.getDate()>9?date.getDate():'0'+date.getDate()
+  const hour = date.getDate()>9?date.getDate():'0'+date.getDate()
+  const min = date.getMinutes()>9?date.getMinutes():'0'+date.getMinutes()
+  const sec = date.getSeconds()>9?date.getSeconds():'0'+date.getSeconds()
+
+  const res = date.getFullYear()+'-'+month+'-'+day+
+      ' '+hour+':'+min+':'+sec
   return res
 }
 

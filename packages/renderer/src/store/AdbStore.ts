@@ -34,10 +34,6 @@ export const AdbStore = defineStore('adb',{
                     cmd:"shell am start -a com.android.settings.APPLICATION_DEVELOPMENT_SETTINGS",
                 },
                 {
-                    title:"电源键",
-                    cmd:"shell input keyevent 26",
-                },
-                {
                     title:"解锁(Redmi K40)",
                     cmd:"shell input swipe 300 1000 300 500",
                 },

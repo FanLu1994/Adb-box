@@ -1,0 +1,100 @@
+{
+  "id": "3694474",
+  "name": "adbbox",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1277",
+      "name": "刷新",
+      "font_class": "shuaxin",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "1351",
+      "name": "向下",
+      "font_class": "xiangxia",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "127302",
+      "name": "apps",
+      "font_class": "apps",
+      "unicode": "e729",
+      "unicode_decimal": 59177
+    },
+    {
+      "icon_id": "375538",
+      "name": "启动",
+      "font_class": "qidong",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "1413421",
+      "name": "安装",
+      "font_class": "anzhuang",
+      "unicode": "e693",
+      "unicode_decimal": 59027
+    },
+    {
+      "icon_id": "1479409",
+      "name": "ic_adb",
+      "font_class": "ic_adb",
+      "unicode": "ea6d",
+      "unicode_decimal": 60013
+    },
+    {
+      "icon_id": "6548548",
+      "name": "下拉",
+      "font_class": "xiala",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "6841616",
+      "name": "停止",
+      "font_class": "lujing",
+      "unicode": "e691",
+      "unicode_decimal": 59025
+    },
+    {
+      "icon_id": "8039333",
+      "name": "终端",
+      "font_class": "zhongduan",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "10278114",
+      "name": "删除",
+      "font_class": "shanchu",
+      "unicode": "e608",
+      "unicode_decimal": 58888
+    },
+    {
+      "icon_id": "10885272",
+      "name": "导出",
+      "font_class": "daochu",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "15726875",
+      "name": "清空",
+      "font_class": "qingkong",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "17990793",
+      "name": "日志",
+      "font_class": "rizhi",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    }
+  ]
+}

@@ -37,19 +37,19 @@ const startMinicap = async ()=>{
   let ws = new WebSocket(`ws://${ip}:${port}/minicap`)
 
   ws.onclose = ()=>{
-    ElMessage.error({
-      message:'minicap连接中断',
-      duration:2000,
-      showClose:true
-    })
+    // ElMessage.error({
+    //   message:'minicap连接中断',
+    //   duration:2000,
+    //   showClose:true
+    // })
   }
 
   ws.onopen=()=>{
-    ElMessage.success({
-      message:'minicap已连接',
-      duration:2000,
-      showClose:true
-    })
+    // ElMessage.success({
+    //   message:'minicap已连接',
+    //   duration:2000,
+    //   showClose:true
+    // })
   }
   let BLANK_IMG =
       'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='

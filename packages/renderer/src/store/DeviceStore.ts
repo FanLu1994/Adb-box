@@ -39,11 +39,11 @@ export const DeviceStore = defineStore('device',{
         AddDevice(device:MyDevice){
             if(!this.deviceList.has(device.id)){
                 this.deviceList.set(device.id,device)
-                ElMessage.info({
-                    message:`设备${device.product}-${device.model}已连接`,
-                    duration:2000,
-                    showClose:true
-                })
+                // ElMessage.info({
+                //     message:`设备${device.product}-${device.model}已连接`,
+                //     duration:2000,
+                //     showClose:true
+                // })
             }
             console.log(this.DeviceList)
 

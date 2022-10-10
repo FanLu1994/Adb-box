@@ -2,7 +2,7 @@
   <div class="flex justify-center	">
     <div class="flex items-center  menus">
       <div v-for="item in menu" class="menu-item space-x-2" @click="onClickMenu(item)">
-        <el-icon><Folder /></el-icon>
+        <i class="iconfont mr-1" :class="item.icon" ></i>
         {{item.title}}
       </div>
     </div>
@@ -24,18 +24,22 @@ const menu = [
   {
     title:'Adb命令',
     path:'/adb',
+    icon:'icon-ic_adb',
   },
   {
     title:'终端',
     path:'/terminal',
+    icon:'icon-zhongduan',
   },
   {
     title:'日志',
     path:'/logcat',
+    icon:'icon-rizhi',
   },
   {
     title:'应用管理',
     path:'/appManager',
+    icon:'icon-apps',
   },
 ]
 

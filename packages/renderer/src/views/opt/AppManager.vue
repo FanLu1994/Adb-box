@@ -7,7 +7,7 @@
 
 
     <div class="flex justify-center items-center pb-5">
-      <el-table :data="device.list" stripe  max-height="600" class="table" >
+      <el-table :data="device.list" stripe  max-height="600" class="table"  v-loading="loading">
         <el-table-column prop="label" label="icon" :min-width="10">
           <template #default="scope">
             <el-image :src="getIconAddr(scope.row.packageName)" class="icon" fit="fill">
@@ -89,6 +89,9 @@ const device = reactive({
   list:temp
 })
 
+// 加载
+const loading = ref(true)
+
 
 // 上传文件
 const installLoading = ref(false)
@@ -97,6 +100,7 @@ const uploadDialogVisiable = ref(false)
 // 刷新应用列表
 const RefreshAppList = async ()=>{
   console.log("刷新列表")
+  loading.value = true
   GetAppList(await GetDeviceIP()).then(res=>{
     console.log(res)
     console.log(res.data)
@@ -104,6 +108,7 @@ const RefreshAppList = async ()=>{
     res.data.forEach((item:Package)=>{
       device.list.push(item)
     })
+    loading.value = false
   })
 }
 
@@ -194,8 +199,8 @@ onMounted( ()=>{
   margin: 1px 5px;
   border-radius: 7px;
   background: #e0e0e0;
-  box-shadow:  5px 5px 10px #9f9f9f,
-    -5px -5px 10px #ffffff;
+  box-shadow:  2px 2px 2px #9f9f9f,
+    -2px -2px 2px #ffffff;
 }
 
 .app-manager-container{

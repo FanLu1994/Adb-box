@@ -107,8 +107,9 @@ const initSocket = async () => {
 onMounted(async ()=>{
   await initSocket()
 
-  window.onresize(()=>{
+  window.addEventListener('resize',()=>{
     try {
+      console.log('终端尺寸变化')
       fitAddon.fit()
     } catch (e) {
       console.log("e", e.message)
@@ -132,6 +133,7 @@ onMounted(async ()=>{
 
 .xterm{
   height: calc(~"100vh - 120px");
+  width: 100%;
 }
 
 .operation-btns{
