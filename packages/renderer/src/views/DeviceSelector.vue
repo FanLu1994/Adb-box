@@ -13,7 +13,7 @@
       <span>内核版本: {{deviceInfo.sdk}}</span>
       <span>安卓版本: {{deviceInfo.system}}</span>
 <!--      <span>CPU: {{deviceInfo.board}}</span>-->
-      <el-icon><View /></el-icon>
+      <i class="iconfont icon-xiala"></i>
     </div>
 
 

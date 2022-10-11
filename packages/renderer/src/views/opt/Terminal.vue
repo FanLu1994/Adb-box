@@ -6,11 +6,11 @@
     </div>
 
     <div class="operation-btns">
-      <el-icon color="white"
-               size="30px"
-               title="重启终端"
-               @click="initSocket"><RefreshRight /></el-icon>
-
+<!--      <el-icon color="white"-->
+<!--               size="30px"-->
+<!--               title="重启终端"-->
+<!--               @click="initSocket"><RefreshRight /></el-icon>-->
+      <i class="iconfont icon-shuaxin text-white init-icon" @click="initSocket"></i>
     </div>
 
   </div>
@@ -140,6 +140,13 @@ onMounted(async ()=>{
   position: absolute;
   right: 5px;
   bottom: 10px;
+}
+
+.init-icon{
+  width: 60px;
+  height: 60px;
+  font-size: 30px;
+  cursor: pointer;
 }
 
 </style>

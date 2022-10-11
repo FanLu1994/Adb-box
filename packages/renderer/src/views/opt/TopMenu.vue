@@ -1,7 +1,8 @@
 <template>
   <div class="flex justify-center	">
     <div class="flex items-center  menus">
-      <div v-for="item in menu" class="menu-item space-x-2" @click="onClickMenu(item)">
+      <div v-for="item in menu" class="menu-item space-x-2" :class="[item.path===currentMenu?'menu-active':'']"
+           @click="onClickMenu(item)">
         <i class="iconfont mr-1" :class="item.icon" ></i>
         {{item.title}}
       </div>
@@ -14,6 +15,7 @@
 
 import {useRouter} from "vue-router";
 import {Notification,Folder} from '@element-plus/icons-vue'
+import {computed} from "vue";
 
 interface menuItem{
   title:string,
@@ -48,6 +50,11 @@ const onClickMenu = (menuItem:menuItem)=>{
   router.push(menuItem.path)
 }
 
+// 当前的路径
+const currentMenu = computed(()=>{
+  return router.currentRoute.value.path
+})
+
 </script>
 
 <style scoped lang="less">
@@ -63,6 +70,12 @@ const onClickMenu = (menuItem:menuItem)=>{
     color: white;
     border-radius: 5px;
   }
+}
+
+.menu-active{
+  background: #34D399;
+  color: white;
+  border-radius: 5px;
 }
 
 .menus{

@@ -28,13 +28,16 @@
 
     <div class="operation-btns">
       <div>
-        <el-icon color="white" size="30px" @click="startLogcat"><CaretRight /></el-icon>
+<!--        <el-icon color="white" size="30px" @click="startLogcat"><CaretRight /></el-icon>-->
+        <i class="iconfont icon-qidong icon-btn" @click="startLogcat"></i>
       </div>
       <div>
-        <el-icon color="white" size="30px" @click="stopLogcat"><VideoPause /></el-icon>
+<!--        <el-icon color="white" size="30px" @click="stopLogcat"><VideoPause /></el-icon>-->
+        <i class="iconfont icon-lujing icon-btn" @click="stopLogcat"></i>
       </div>
       <div>
-        <el-icon color="white" size="30px" @click="clearLogcat"><Delete /></el-icon>
+<!--        <el-icon color="white" size="30px" @click="clearLogcat"><Delete /></el-icon>-->
+        <i class="iconfont icon-shanchu icon-btn" @click="clearLogcat"></i>
       </div>
     </div>
   </div>
@@ -279,13 +282,18 @@ onMounted(()=>{
   position: absolute;
   cursor: pointer;
   right: 10px;
-  bottom: 12px;
+  bottom: 20px;
   display: flex;
   flex-direction: column;
   --tw-space-y-reverse: 1;
-  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
+  margin-top: calc(0.1rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.1rem * var(--tw-space-y-reverse));
 
+}
+
+.icon-btn{
+  color: white;
+  font-size: 20px;
 }
 
 </style>
