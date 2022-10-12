@@ -272,6 +272,7 @@ onMounted(()=>{
   text-align: left;
   padding: 5px 5px 20px 5px;
   overflow-y:scroll;
+  overflow-x:hidden;
   cursor:text;
   user-select: text;
   box-shadow:  6px 6px 12px #bebebe,
@@ -281,7 +282,7 @@ onMounted(()=>{
 .operation-btns{
   position: absolute;
   cursor: pointer;
-  right: 10px;
+  right: 20px;
   bottom: 20px;
   display: flex;
   flex-direction: column;
