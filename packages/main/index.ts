@@ -1,6 +1,7 @@
 import { app, BrowserWindow, shell, ipcMain,Menu } from 'electron'
 import { release } from 'os'
 import { join } from 'path'
+import {LogcatListener} from "./event/LogcatListener";
 
 const remote = require("@electron/remote/main")
 remote.initialize()
@@ -70,6 +71,9 @@ async function createWindow() {
     if (url.startsWith('https:')) shell.openExternal(url)
     return { action: 'deny' }
   })
+
+  // 启动监听器
+  LogcatListener(win)
 }
 
 app.whenReady().then(createWindow)

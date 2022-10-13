@@ -39,6 +39,9 @@
 <!--        <el-icon color="white" size="30px" @click="clearLogcat"><Delete /></el-icon>-->
         <i class="iconfont icon-shanchu icon-btn" @click="clearLogcat"></i>
       </div>
+      <div>
+        <i class="iconfont icon-daochu icon-btn" @click="saveLogcat"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +56,7 @@ import {Priority} from "adb-ts";
 import LogcatEntry from "adb-ts/lib/logcat/entry";
 import {CaretRight,VideoPause,Delete} from "@element-plus/icons-vue"
 import {useScroll} from "@vueuse/core";
+import {ipcRenderer} from "electron";
 
 interface CustomLevel{
   label:string,
@@ -245,6 +249,18 @@ const scrollToBottom = ()=>{
   }
 }
 
+// 导出日志
+const saveLogcat = ()=>{
+  let saveLog = []
+  for (let i = 0; i < logCatInfo.list.length; i++) {
+    let entry = logCatInfo.list[i]
+    saveLog.push(
+        dateFormat(entry.date.toString())+" "+getLabel(entry.priority)+" "+entry.message
+    )
+  }
+  ipcRenderer.send('save-logcat',JSON.stringify(saveLog))
+}
+
 onActivated(()=>{
   scrollToTop.value = false
   scrollToBottom()
@@ -295,6 +311,9 @@ onMounted(()=>{
 .icon-btn{
   color: white;
   font-size: 20px;
+  &:hover{
+    color:darken(white,40)
+  }
 }
 
 </style>
