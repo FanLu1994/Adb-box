@@ -10,3 +10,7 @@ import {port} from "./monitor";
 export const GetAppList = (ip:string)=>{
     return axios.get(`http://${ip}:${port}/packages`)
 }
+
+export const GetDeviceInfo = (ip:string)=>{
+    return axios.get(`http://${ip}:${port}/info`)
+}
