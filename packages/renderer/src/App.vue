@@ -18,7 +18,7 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div class="home">
+  <div class="home" id="app">
     <div class="screen">
       <ScreenCpy></ScreenCpy>
     </div>
@@ -43,6 +43,7 @@ onMounted(()=>{
   color: #2c3e50;
   height: 752px;
   width: 100%;
+  overflow: hidden;
 }
 
 .logo-box {
@@ -70,6 +71,7 @@ onMounted(()=>{
   background: #ECFDF5;
   overflow-y: hidden;
   font-font: "Times New Roman","Microsoft YaHei";
+  overflow: hidden;
 }
 
 </style>

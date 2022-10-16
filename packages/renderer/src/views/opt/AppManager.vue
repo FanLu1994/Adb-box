@@ -4,10 +4,15 @@
 <!--      <el-button @click="RefreshAppList" type="primary">刷新</el-button>-->
 <!--      <el-button @click="uploadDialogVisiable = true" type="primary">安装应用</el-button>-->
       <i class="iconfont icon-shuaxin  init-icon" @click="RefreshAppList"></i>
-      <i class="iconfont icon-anzhuang  init-icon" @click="uploadDialogVisiable = true"></i>
-
+      <i class="iconfont icon-anzhuang  init-icon" @click="showUploadBlock = true"></i>
     </div>
 
+    <div class="upload-block" v-show="showUploadBlock" ref="dropZoneRef">
+      <div class="upload-info">
+        <i class="iconfont icon-apk apk-icon" ></i>
+        <span>拖动apk文件到此处</span>
+      </div>
+    </div>
 
     <div class=" pb-5 app-table" ref="tableRegion">
       <el-table :data="device.list" stripe  :max-height="getTableHeight"
@@ -71,7 +76,7 @@ import {computed, onMounted, reactive, ref, unref} from "vue";
 import {CustomAdbClient} from "../../utils/adbClient";
 import {DeviceStore} from "../../store/DeviceStore";
 import {ElMessage, install, UploadProps, UploadUserFile} from "element-plus";
-import {useDropZone, useElementSize} from "@vueuse/core";
+import {onClickOutside, useDropZone, useElementSize} from "@vueuse/core";
 import {Picture} from "@element-plus/icons-vue";
 
 const deviceStore = DeviceStore()
@@ -102,6 +107,7 @@ const loading = ref(true)
 // 上传文件
 const installLoading = ref(false)
 const uploadDialogVisiable = ref(false)
+const showUploadBlock = ref(false)
 
 // 刷新应用列表
 const RefreshAppList = async ()=>{
@@ -158,6 +164,9 @@ function onDrop(files: File[] | null) {
 
 const dropZoneRef = ref<HTMLElement>()
 const {isOverDropZone} = useDropZone(dropZoneRef,onDrop)
+onClickOutside(dropZoneRef, (event) => {
+  showUploadBlock.value = false
+})
 
 const onInstallApp = (apkPath:string)=>{
   installLoading.value = true
@@ -203,8 +212,6 @@ const getTableWidth = computed(()=>{
 
 
 
-
-
 onMounted( ()=>{
  RefreshAppList()
 })
@@ -231,6 +238,7 @@ onMounted( ()=>{
 
 .app-manager-container{
   width: 100%;
+  overflow: hidden;
 }
 
 .icon{
@@ -249,7 +257,7 @@ onMounted( ()=>{
   flex-direction: column;
   right: 10px;
   bottom: 10px;
-  z-index: 99999;
+  z-index: 9999;
 }
 
 .init-icon{
@@ -257,5 +265,49 @@ onMounted( ()=>{
   font-size: 25px;
   cursor: pointer;
 }
+
+@keyframes myRotate{
+  0%{
+    -webkit-transform: rotate(-90deg);
+    transform-origin: 100% 100%;
+  }
+  100%{
+    -webkit-transform: rotate(0deg);
+    transform-origin: 100% 100%;
+  }
+}
+
+.upload-block{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  height: 200px;
+  width: 200px;
+  z-index: 9999999;
+  background: #7bf9cb;
+  border-radius: 300px 0 0 0  ;
+  box-shadow:  -9px -9px 18px #60c29e,
+  9px 9px 18px #96fff8;
+  overflow: hidden;
+
+  animation-name:myRotate ;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+
+
+  .upload-info{
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px;
+    margin-left: 20px;
+    color:black;
+  }
+
+  .apk-icon{
+    font-size: 50px;
+  }
+}
+
+
 
 </style>
