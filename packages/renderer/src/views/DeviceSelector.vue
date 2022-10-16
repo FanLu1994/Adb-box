@@ -203,7 +203,7 @@ const getDeviceDetailInfo = async ()=>{
   box-shadow:  10px 10px 20px #dedede,
     -10px -10px 20px #ffffff;
   //width: 500px;
-  z-index: 1000;
+  z-index: 99999;
 }
 
 .device-info-item{

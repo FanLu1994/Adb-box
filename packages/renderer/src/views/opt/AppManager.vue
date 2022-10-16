@@ -1,13 +1,19 @@
 <template>
   <div class="app-manager-container">
     <div class="operate-btn">
-      <el-button @click="RefreshAppList" type="primary">刷新</el-button>
-      <el-button @click="uploadDialogVisiable = true" type="primary">安装应用</el-button>
+<!--      <el-button @click="RefreshAppList" type="primary">刷新</el-button>-->
+<!--      <el-button @click="uploadDialogVisiable = true" type="primary">安装应用</el-button>-->
+      <i class="iconfont icon-shuaxin  init-icon" @click="RefreshAppList"></i>
+      <i class="iconfont icon-anzhuang  init-icon" @click="uploadDialogVisiable = true"></i>
+
     </div>
 
 
-    <div class="flex justify-center items-center pb-5">
-      <el-table :data="device.list" stripe  max-height="600" class="table"  v-loading="loading">
+    <div class=" pb-5 app-table" ref="tableRegion">
+      <el-table :data="device.list" stripe  :max-height="getTableHeight"
+                :style="{width:getTableWidth}"
+                class="table"
+                v-loading="loading">
         <el-table-column prop="label" label="icon" :min-width="10">
           <template #default="scope">
             <el-image :src="getIconAddr(scope.row.packageName)" class="icon" fit="fill">
@@ -61,11 +67,11 @@
 
 <script setup lang="ts">
 import {GetAppList} from "../../utils/api";
-import {onMounted, reactive, ref, unref} from "vue";
+import {computed, onMounted, reactive, ref, unref} from "vue";
 import {CustomAdbClient} from "../../utils/adbClient";
 import {DeviceStore} from "../../store/DeviceStore";
 import {ElMessage, install, UploadProps, UploadUserFile} from "element-plus";
-import {useDropZone} from "@vueuse/core";
+import {useDropZone, useElementSize} from "@vueuse/core";
 import {Picture} from "@element-plus/icons-vue";
 
 const deviceStore = DeviceStore()
@@ -102,8 +108,6 @@ const RefreshAppList = async ()=>{
   console.log("刷新列表")
   loading.value = true
   GetAppList(await GetDeviceIP()).then(res=>{
-    console.log(res)
-    console.log(res.data)
     device.list = []
     res.data.forEach((item:Package)=>{
       device.list.push(item)
@@ -115,7 +119,6 @@ const RefreshAppList = async ()=>{
 // 卸载app
 const adbClient = CustomAdbClient.getClient()
 const uninstallApp = (row:Package)=>{
-  console.log(row)
   adbClient.uninstall(deviceStore.CurrentDevice.id,row.packageName)
   RefreshAppList()
 }
@@ -180,10 +183,26 @@ const onInstallApp = (apkPath:string)=>{
 }
 
 const getIconAddr = (packageName:string)=>{
-  console.log(GetDeviceIP())
-  console.log(`http://${atxIP}:7912/packages/${packageName}/icon`)
   return `http://${atxIP}:7912/packages/${packageName}/icon`
 }
+
+// 监听元素尺寸
+const tableRegion = ref(null)
+const tableRegionSize = useElementSize(tableRegion)
+
+// 计算当前视口适应的表格高度
+const getTableHeight = computed(()=>{
+  console.log(tableRegionSize.height.value - 50)
+  return tableRegionSize.height.value - 50
+})
+
+const getTableWidth = computed(()=>{
+  return tableRegionSize.width.value+'px'
+})
+
+
+
+
 
 
 onMounted( ()=>{
@@ -202,6 +221,13 @@ onMounted( ()=>{
   box-shadow:  2px 2px 2px #9f9f9f,
     -2px -2px 2px #ffffff;
 }
+//
+//.app-table{
+//  position: relative;
+//  .el-table{
+//    position: absolute;
+//  }
+//}
 
 .app-manager-container{
   width: 100%;
@@ -212,10 +238,24 @@ onMounted( ()=>{
   border-radius: 5px;
 }
 
+.app-table{
+  //height: calc(100vh - 100px);
+  height: 100vh
+}
+
 .operate-btn{
   position: absolute;
+  display: flex;
+  flex-direction: column;
   right: 10px;
-  bottom: 20px;
+  bottom: 10px;
+  z-index: 99999;
+}
+
+.init-icon{
+  color: black;
+  font-size: 25px;
+  cursor: pointer;
 }
 
 </style>
