@@ -39,7 +39,8 @@
         <el-table-column prop="size" label="体积" :min-width="10"/>
         <el-table-column prop="" label="操作" :min-width="10">
           <template #default="scope" >
-            <el-button class="text-sm" @click="uninstallApp(scope.row)" type="text" >卸载应用</el-button>
+<!--            <el-button class="text-sm" @click="uninstallApp(scope.row)" type="text" >卸载应用</el-button>-->
+            <i class="iconfont icon-shanchu uninstall-icon" title="卸载" @click="uninstallApp(scope.row)"></i>
           </template>
         </el-table-column>
       </el-table>
@@ -305,6 +306,11 @@ onMounted( ()=>{
 
   .apk-icon{
     font-size: 50px;
+  }
+
+  .uninstall-icon{
+    font-size: 20px;
+    cursor: pointer;
   }
 }
 

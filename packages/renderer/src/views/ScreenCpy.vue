@@ -1,13 +1,15 @@
 <template>
-  <div class="screen-container">
+  <div class="screen-container" ref="screenCpy">
+    <div class="reconnect">
+<!--      <el-icon color="#000000"-->
+<!--               size="30px"-->
+<!--               @click="initMinicap"><RefreshRight /></el-icon>-->
+      <el-button v-show="isHovered" text  @click="initMinicap" class="reconnect-btn"> reconnect </el-button>
+    </div>
     <canvas id="canvas" style="width: 320px;padding: 5px">
     </canvas>
 
-    <div class="reconnect">
-      <el-icon color="#000000"
-               size="30px"
-               @click="initMinicap"><RefreshRight /></el-icon>
-    </div>
+
   </div>
 </template>
 
@@ -17,10 +19,11 @@
 import {ElMessage} from "element-plus";
 import {monitor, port} from "../utils/monitor";
 import bus from "../utils/bus";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import {DeviceStore} from "../store/DeviceStore";
 import {CustomAdbClient} from "../utils/adbClient";
 import {RefreshRight} from "@element-plus/icons-vue";
+import {useElementHover} from "@vueuse/core/index";
 
 const deviceStore = DeviceStore()
 const client = CustomAdbClient.getClient()
@@ -63,6 +66,7 @@ const startMinicap = async ()=>{
     img.onload = function() {
       canvas.width = img.width
       canvas.height = img.height
+      document.getElementById('canvas').style.height = canvas.height+'px'
       g.drawImage(img, 0, 0)
       img.onload = null
       img.src = BLANK_IMG
@@ -75,6 +79,10 @@ const startMinicap = async ()=>{
     img.src = u
   }
 }
+
+// 监听悬浮
+const screenCpy = ref(null)
+const isHovered = useElementHover(screenCpy)
 
 const initMinicap = ()=>{
   monitor.StartMonitor(deviceStore.CurrentDevice.id)
@@ -92,22 +100,29 @@ onMounted(()=>{
 .screen-container{
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+
 }
 
 #canvas{
   border-radius: 20px;
-  background: #e0e0e0;
+  height: 650px;
+  background: black;
+  margin-top: 50px;
   box-shadow:  6px 6px 12px #bebebe,
     -6px -6px 12px #ffffff;
 }
 
 .reconnect{
-  position: absolute;
   color: #34D399;
-  left:20px;
-  bottom: 50px;
+  margin-bottom: 5px;
+  position: absolute;
+  top:10px;
+}
+
+.reconnect-btn{
 }
 
 </style>
