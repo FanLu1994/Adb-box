@@ -65,16 +65,16 @@ interface CustomLevel{
 }
 
 const logLevel = ref([
-  {
-    label:'default',
-    level:1,
-    color:'#10B981'
-  },
-  {
-    label:'verbose',
-    level:2,
-    color:'#10B981'
-  },
+  // {
+  //   label:'default',
+  //   level:1,
+  //   color:'#10B981'
+  // },
+  // {
+  //   label:'verbose',
+  //   level:2,
+  //   color:'#10B981'
+  // },
   {
     label:'debug',
     level:3,

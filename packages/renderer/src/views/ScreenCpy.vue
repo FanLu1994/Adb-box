@@ -6,9 +6,13 @@
 <!--               @click="initMinicap"><RefreshRight /></el-icon>-->
       <el-button v-show="isHovered" text  @click="initMinicap" class="reconnect-btn"> reconnect </el-button>
     </div>
-    <canvas id="canvas" style="width: 320px;padding: 5px">
+    <canvas id="canvas" >
     </canvas>
 
+
+<!--    <div class="mask" v-show="showMask">-->
+
+<!--    </div>-->
 
   </div>
 </template>
@@ -66,7 +70,7 @@ const startMinicap = async ()=>{
     img.onload = function() {
       canvas.width = img.width
       canvas.height = img.height
-      document.getElementById('canvas').style.height = canvas.height+'px'
+      document.getElementById('canvas').style.height = 'auto'
       g.drawImage(img, 0, 0)
       img.onload = null
       img.src = BLANK_IMG
@@ -101,18 +105,19 @@ onMounted(()=>{
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  //justify-content: center;
   align-items: center;
-
 }
 
 #canvas{
   border-radius: 20px;
-  height: 650px;
   background: black;
   margin-top: 50px;
   box-shadow:  6px 6px 12px #bebebe,
     -6px -6px 12px #ffffff;
+  padding: 5px;
+  height: 700px;
+  width: 340px;
 }
 
 .reconnect{

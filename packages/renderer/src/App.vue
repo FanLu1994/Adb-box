@@ -41,9 +41,8 @@ onMounted(()=>{
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  height: 752px;
+  /*height: 752px;*/
   width: 100%;
-  overflow: hidden;
 }
 
 .logo-box {

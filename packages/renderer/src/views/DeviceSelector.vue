@@ -21,7 +21,7 @@
           class="margin-top"
           title=""
           size="middle"
-          :column="2"
+          :column="1"
           border
       >
         <el-descriptions-item>
@@ -196,12 +196,12 @@ const getDeviceDetailInfo = async ()=>{
 .device-detail-info{
   position: absolute;
   top:40px;
-  left: 580px;
+  left: 610px;
   padding: 10px 10px;
   border-radius: 17px;
   background: white;
-  box-shadow:  10px 10px 20px #dedede,
-    -10px -10px 20px #ffffff;
+  --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   //width: 500px;
   z-index: 99999;
 }
