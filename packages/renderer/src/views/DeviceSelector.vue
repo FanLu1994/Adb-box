@@ -13,10 +13,10 @@
       <span>内核版本: {{deviceInfo.sdk}}</span>
       <span>安卓版本: {{deviceInfo.system}}</span>
 <!--      <span>CPU: {{deviceInfo.board}}</span>-->
-      <i class="iconfont icon-xiala" @mouseover="showDetail=true" @mouseleave="showDetail=false"></i>
+      <i class="iconfont icon-xiala detail-btn" @click="showDetail=!showDetail" ></i>
     </div>
 
-    <div class="device-detail-info" v-if="showDetail">
+    <div class="device-detail-info" v-if="showDetail" ref="detailInfo">
       <el-descriptions
           class="margin-top"
           title=""
@@ -30,7 +30,9 @@
               UDID
             </div>
           </template>
-          {{ deviceDetailInfo['udid'] }}
+          <span class="cursor-pointer" @click="copyInfo(deviceDetailInfo['udid'])">
+            {{ deviceDetailInfo['udid'] }}
+          </span>
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -38,7 +40,9 @@
               安卓版本
             </div>
           </template>
-          {{ deviceDetailInfo['version'] }}
+          <span class="cursor-pointer" @click="copyInfo(deviceDetailInfo['version'])">
+            {{ deviceDetailInfo['version'] }}
+          </span>
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -46,7 +50,9 @@
               序列号
             </div>
           </template>
-          {{ deviceDetailInfo['serial'] }}
+          <span class="cursor-pointer" @click="copyInfo(deviceDetailInfo['serial'])">
+            {{ deviceDetailInfo['serial'] }}
+          </span>
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -54,7 +60,9 @@
               分辨率
             </div>
           </template>
-          {{deviceDetailInfo['display']['width']}}*{{deviceDetailInfo['display']['height']}}
+          <span class="cursor-pointer" @click="copyInfo(deviceDetailInfo['display']['width']+'*'+deviceDetailInfo['display']['height'])">
+                {{deviceDetailInfo['display']['width']}}*{{deviceDetailInfo['display']['height']}}
+          </span>
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -62,7 +70,9 @@
               电池
             </div>
           </template>
-          {{deviceDetailInfo['battery']['level']}}
+          <span class="cursor-pointer" @click="copyInfo(deviceDetailInfo['battery']['level'])">
+            {{deviceDetailInfo['battery']['level']}}
+          </span>
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -70,7 +80,9 @@
               内存
             </div>
           </template>
-          {{deviceDetailInfo['memory']['around']}}
+          <span class="cursor-pointer" @click="copyInfo(deviceDetailInfo['memory']['around'])">
+            {{deviceDetailInfo['memory']['around']}}
+          </span>
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -78,7 +90,9 @@
               CPU核数
             </div>
           </template>
-          {{deviceDetailInfo['cpu']['cores']}}
+          <span class="cursor-pointer" @click="copyInfo(deviceDetailInfo['cpu']['cores'])">
+            {{deviceDetailInfo['cpu']['cores']}}
+          </span>
         </el-descriptions-item>
         <el-descriptions-item>
           <template #label>
@@ -86,7 +100,9 @@
               CPU型号
             </div>
           </template>
-          {{deviceDetailInfo['cpu']['hardware']}}
+          <span class="cursor-pointer" @click="copyInfo(deviceDetailInfo['cpu']['hardware'])">
+            {{deviceDetailInfo['cpu']['hardware']}}
+          </span>
         </el-descriptions-item>
       </el-descriptions>
 <!--      <div class="device-info-item" v-for="(key,index) in Object.keys(deviceDetailInfo)">-->
@@ -112,6 +128,9 @@ import {CustomAdbClient} from "../utils/adbClient";
 import {monitor} from "../utils/monitor";
 import {View} from '@element-plus/icons-vue'
 import {GetDeviceInfo} from "../utils/api";
+import {onClickOutside} from "@vueuse/core";
+import {clipboard} from "@electron/remote";
+import {ElMessage} from "element-plus";
 
 const deviceStore = DeviceStore()
 
@@ -175,10 +194,18 @@ const getDeviceDetailInfo = async ()=>{
   })
 }
 
+// 关闭详情弹窗
+const detailInfo = ref(null)
+onClickOutside(detailInfo,(evt)=>showDetail.value = false)
 
-// const startMonitor = ()=>{
-//   monitor.StartMonitor(deviceStore.CurrentDevice.id)
-// }
+const copyInfo = (info:string)=>{
+  clipboard.writeText(info)
+  ElMessage.success({
+    message:'已复制到剪贴板',
+    duration:1000,
+    showClose:true,
+  })
+}
 
 </script>
 
@@ -193,6 +220,14 @@ const getDeviceDetailInfo = async ()=>{
   align-items: center;
 }
 
+.detail-btn{
+  cursor: pointer;
+  &:hover{
+    color:#6B7280;
+  }
+
+}
+
 .device-detail-info{
   position: absolute;
   top:40px;
@@ -203,7 +238,7 @@ const getDeviceDetailInfo = async ()=>{
   --tw-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
   //width: 500px;
-  z-index: 99999;
+  z-index: 99;
 }
 
 .device-info-item{

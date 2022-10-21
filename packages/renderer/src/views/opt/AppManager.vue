@@ -7,12 +7,14 @@
       <i class="iconfont icon-anzhuang  init-icon" @click="showUploadBlock = true"></i>
     </div>
 
-    <div class="upload-block" v-show="showUploadBlock" ref="dropZoneRef">
-      <div class="upload-info">
-        <i class="iconfont icon-apk apk-icon" ></i>
-        <span>拖动apk文件到此处</span>
+    <transition name="upload-block">
+      <div class="upload-block block-color" v-show="showUploadBlock" ref="dropZoneRef">
+        <div class="upload-info">
+          <i class="iconfont icon-apk apk-icon" ></i>
+          <span>拖动apk文件到此处</span>
+        </div>
       </div>
-    </div>
+    </transition>
 
     <div class=" pb-5 app-table" ref="tableRegion">
       <el-table :data="device.list" stripe  :max-height="getTableHeight"
@@ -46,34 +48,13 @@
       </el-table>
     </div>
 
-    <el-dialog
-        v-model="uploadDialogVisiable"
-        :append-to-body="false"
-        custom-class="rounded-3xl"
-        title="安装应用"
-        v-loading="installLoading"
-        width="50%"
-    >
-      <div ref="dropZoneRef" class="flex flex-col w-full min-h-200px h-auto bg-gray-400/10 justify-center items-center mt-6">
-        <div> isOverDropZone: <BooleanDisplay :value="isOverDropZone" /></div>
-        <div class="flex flex-wrap justify-center items-center">
-          <div v-for="(file, index) in filesData" :key="index" class="w-200px bg-black-200/10 ma-2 pa-6">
-            <p>Name: {{ file.name }}</p>
-            <p>path: {{ file.path }}</p>
-            <p>Size: {{ file.size }}</p>
-            <p>Type: {{ file.type }}</p>
-            <p>Last modified: {{ file.lastModified }}</p>
-          </div>
-        </div>
-      </div>
-    </el-dialog>
   </div>
 
 </template>
 
 <script setup lang="ts">
 import {GetAppList} from "../../utils/api";
-import {computed, onMounted, reactive, ref, unref} from "vue";
+import {computed, onMounted, reactive, ref, unref, watch} from "vue";
 import {CustomAdbClient} from "../../utils/adbClient";
 import {DeviceStore} from "../../store/DeviceStore";
 import {ElMessage, install, UploadProps, UploadUserFile} from "element-plus";
@@ -139,7 +120,6 @@ const filesData = ref<{
   lastModified: number }[]>([])
 function onDrop(files: File[] | null) {
   filesData.value = []
-
   // 判断是否是一个apk文件
   if(files && files.length==1 && files[0].name.endsWith('.apk')){
     // 安装文件
@@ -165,6 +145,14 @@ function onDrop(files: File[] | null) {
 
 const dropZoneRef = ref<HTMLElement>()
 const {isOverDropZone} = useDropZone(dropZoneRef,onDrop)
+watch(isOverDropZone,()=>{
+  if(isOverDropZone.value){
+    dropZoneRef.value?.classList.replace('block-color','block-over-color')
+  }else{
+    dropZoneRef.value?.classList.replace('block-over-color','block-color')
+  }
+})
+
 onClickOutside(dropZoneRef, (event) => {
   showUploadBlock.value = false
 })
@@ -278,6 +266,25 @@ onMounted( ()=>{
   }
 }
 
+@keyframes myRotate-leave{
+  0%{
+    -webkit-transform: rotate(0deg);
+    transform-origin: 100% 100%;
+  }
+  100%{
+    -webkit-transform: rotate(-90deg);
+    transform-origin: 100% 100%;
+  }
+}
+
+.block-color{
+  background: #7bf9cb;
+}
+
+.block-over-color{
+  background: #065F46;
+}
+
 .upload-block{
   position: absolute;
   right: 0;
@@ -285,16 +292,11 @@ onMounted( ()=>{
   height: 200px;
   width: 200px;
   z-index: 9999999;
-  background: #7bf9cb;
+
   border-radius: 300px 0 0 0  ;
   box-shadow:  -9px -9px 18px #60c29e,
   9px 9px 18px #96fff8;
   overflow: hidden;
-
-  animation-name:myRotate ;
-  animation-duration: 1s;
-  animation-iteration-count: 1;
-
 
   .upload-info{
     display: flex;
@@ -312,6 +314,19 @@ onMounted( ()=>{
     font-size: 20px;
     cursor: pointer;
   }
+}
+
+.upload-block-enter-active{
+  animation-name:myRotate ;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+}
+
+.upload-block-leave-active{
+  animation-name:myRotate ;
+  animation-direction: reverse;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
 }
 
 

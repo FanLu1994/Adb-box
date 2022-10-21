@@ -80,6 +80,13 @@ const initSocket = async () => {
     term.open(document.getElementById('xterm'));
     term.focus();
     fitAddon.fit()
+
+    // TODO:自定义快捷键（ctrl+c ctrl+v）
+    // term.attachCustomKeyEventHandler(()=>{
+    //
+    // })
+
+
     // $("#xterm").resize(function() {
     //   term.fit()
     // })
