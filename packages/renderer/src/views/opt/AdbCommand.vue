@@ -1,9 +1,9 @@
 <template>
   <div class="adb-cmd-container">
     <div class="adb-cmd" v-for="(adbCommand,index) in adbList"
-         @mousedown="onLongPress(adbCommand.title)"
-         @mouseup="mouseUp"
-         :key="index" @click="onExecAdbCmd(adbCommand)">
+         @mousedown="onMouseDown(adbCommand)"
+         @mouseup="mouseUp(adbCommand)"
+         :key="index"  @contextmenu="onRightClickAdbCmd(adbCommand,$event)">
       {{adbCommand.title}}
     </div>
   </div>
@@ -98,24 +98,38 @@ const onExecAdbCmd = (adbcmd:AdbCommand)=>{
   })
 }
 
+// adb右键菜单
+const onRightClickAdbCmd = (adbcmd:AdbCommand,event:Event)=>{
+  console.log("右键点击")
+  ElMessageBox.confirm(
+      '确认删除？',
+      '',
+      {
+        confirmButtonText:'确认',
+        cancelButtonText:'取消',
+        type:'warning',
+      }
+  ).then(()=>{
+    adbStore.RemoveCommand(adbcmd.title)
+  }).catch(()=>{
+
+  })
+}
+
 // 滚动相关
 const el = ref<HTMLElement | null>(null)
 const { x, y, isScrolling, arrivedState, directions } = useScroll(el)
 const { left, right, top, bottom } = toRefs(arrivedState)
 const { left: toLeft, right: toRight, top: toTop, bottom: toBottom } = toRefs(directions)
-
 watch(toTop,()=>{
   scrollToTop.value = true
 })
-
 watch(bottom,()=>{
   scrollToTop.value  = false
 })
-
 const scrollToTop = ref(false)
 const scrollToBottom = ()=>{
   const ele = document.getElementById('adb-terminal')!
-
   // 当前滚动条在底部修改滚动条位置
   if (!unref(scrollToTop)) {
     // 新消息渲染完成，修改滚动条位置
@@ -155,20 +169,29 @@ const addCmdToList = ()=>{
 }
 
 // 长按删除
+let isLongPress = false
 let counter = setInterval(()=>{});
-const onLongPress = (title:string)=>{
+const onMouseDown = (adbcmd:AdbCommand)=>{
   let timeStart = new Date().getTime()
   counter = setInterval(()=>{
     let timeNow = new Date().getTime()
-    if(timeNow-timeStart>1000){
+    if(timeNow-timeStart>500){
+      isLongPress = true
       clearInterval(counter)
-      delcmd(title)
+      console.log("触发删除")
+    }else{
+      isLongPress = false
     }
   },100)
 }
 
-const mouseUp = ()=>{
+const mouseUp = (adbcmd:AdbCommand)=>{
   clearInterval(counter)
+  // 短按触发命令执行
+  if(!isLongPress){
+    onExecAdbCmd(adbcmd)
+  }
+  isLongPress = false
 }
 
 // 删除cmd
@@ -219,10 +242,13 @@ onMounted(()=>{
     margin-right: 5px;
     height: 30px;
     cursor: pointer;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
 
     &:hover{
       box-shadow: none;
-      background: #86EFAC;
+      background: #E5E7EB;
     }
   }
 }
