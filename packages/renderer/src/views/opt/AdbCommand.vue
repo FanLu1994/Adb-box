@@ -1,9 +1,11 @@
 <template>
   <div class="adb-cmd-container">
-    <div class="adb-cmd" v-for="(adbCommand,index) in adbList"
-         @mousedown="onMouseDown(adbCommand)"
-         @mouseup="mouseUp(adbCommand)"
-         :key="index"  @contextmenu="onRightClickAdbCmd(adbCommand,$event)">
+    <div class="adb-cmd"
+         v-for="(adbCommand,index) in adbList"
+         @mousedown="onMouseDown(adbCommand,`adb-cmd-${index}`)"
+         @mouseup="mouseUp(adbCommand,`adb-cmd-${index}`)"
+         :id="`adb-cmd-${index}`"
+         :key="index">
       {{adbCommand.title}}
     </div>
   </div>
@@ -98,9 +100,8 @@ const onExecAdbCmd = (adbcmd:AdbCommand)=>{
   })
 }
 
-// adb右键菜单
-const onRightClickAdbCmd = (adbcmd:AdbCommand,event:Event)=>{
-  console.log("右键点击")
+// 删除命令
+const onDeleteCmd = (adbcmd:AdbCommand,id:string)=>{
   ElMessageBox.confirm(
       '确认删除？',
       '',
@@ -111,8 +112,9 @@ const onRightClickAdbCmd = (adbcmd:AdbCommand,event:Event)=>{
       }
   ).then(()=>{
     adbStore.RemoveCommand(adbcmd.title)
+    document.getElementById(id)!.classList.remove('adb-cmd-delete')
   }).catch(()=>{
-
+    document.getElementById(id)!.classList.remove('adb-cmd-delete')
   })
 }
 
@@ -169,29 +171,35 @@ const addCmdToList = ()=>{
 }
 
 // 长按删除
-let isLongPress = false
+const longPress = ref(false)
 let counter = setInterval(()=>{});
-const onMouseDown = (adbcmd:AdbCommand)=>{
+const onMouseDown = (adbcmd:AdbCommand,id:string)=>{
   let timeStart = new Date().getTime()
   counter = setInterval(()=>{
     let timeNow = new Date().getTime()
     if(timeNow-timeStart>500){
-      isLongPress = true
+      longPress.value = true
       clearInterval(counter)
       console.log("触发删除")
+      // 触发删除动画
+      document.getElementById(id)!.classList.add('adb-cmd-delete')
     }else{
-      isLongPress = false
+      longPress.value = false
     }
   },100)
 }
 
-const mouseUp = (adbcmd:AdbCommand)=>{
+const mouseUp = (adbcmd:AdbCommand,id:string)=>{
+  if(document.getElementById(id)!.classList.contains('adb-cmd-delete')){
+    onDeleteCmd(adbcmd,id)
+  }
+
   clearInterval(counter)
   // 短按触发命令执行
-  if(!isLongPress){
+  if(!longPress.value){
     onExecAdbCmd(adbcmd)
   }
-  isLongPress = false
+  longPress.value = false
 }
 
 // 删除cmd
@@ -251,6 +259,13 @@ onMounted(()=>{
       background: #E5E7EB;
     }
   }
+
+  //.adb-delete{
+  //  &:after{
+  //    content:" x";
+  //    color:red;
+  //  }
+  //}
 }
 .adb-terminal-container{
   padding: 5px 5px 20px 5px;
@@ -287,5 +302,17 @@ onMounted(()=>{
   color:#EF4444;
 }
 
+.adb-cmd-delete{
+  animation: shake 800ms ease-in-out ;
+  animation-iteration-count: infinite;
+}
+
+@keyframes shake { /* 水平抖动，核心代码 */
+  10%, 90% { transform: translate3d(-1px, 0, 0); }
+  20%, 80% { transform: translate3d(+1px, 0, 0); }
+  30%, 70% { transform: translate3d(-1px, 0, 0); }
+  40%, 60% { transform: translate3d(+1px, 0, 0); }
+  50% { transform: translate3d(-1px, 0, 0); }
+}
 
 </style>

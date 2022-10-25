@@ -325,7 +325,7 @@ onMounted( ()=>{
 .upload-block-leave-active{
   animation-name:myRotate ;
   animation-direction: reverse;
-  animation-duration: 1s;
+  animation-duration: 0.5s;
   animation-iteration-count: 1;
 }
 
