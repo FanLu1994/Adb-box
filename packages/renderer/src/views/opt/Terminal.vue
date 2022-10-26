@@ -17,9 +17,9 @@
 
 </template>
 
-<script setup >
+<script setup lang="ts">
 import 'xterm/css/xterm.css'
-import {Terminal} from 'xterm'
+import {ITerminalOptions, Terminal} from 'xterm'
 import {FitAddon} from 'xterm-addon-fit'
 import {AttachAddon} from 'xterm-addon-attach'
 import {onMounted} from "vue";
@@ -28,14 +28,14 @@ import {CustomAdbClient} from "../../utils/adbClient";
 import {RefreshRight} from "@element-plus/icons-vue"
 
 // 初始化终端
-let term;
-let websocket;
+let term:Terminal;
+let websocket:WebSocket;
 const deviceStore = DeviceStore()
 const client = CustomAdbClient.getClient()
 
 // 处理数据
-const ab2str = (buf)=> {
-  return String.fromCharCode.apply(null, new Uint8Array(buf));
+const ab2str = (buf:Iterable<number>)=> {
+  return String.fromCharCode.apply(null, new Uint8Array(buf) as unknown as number[]);
 }
 
 
@@ -61,7 +61,7 @@ const initSocket = async () => {
         foreground:'white',
         background:'#2c3e50',
       }
-    });
+    } as ITerminalOptions);
     term.loadAddon(fitAddon);
 
     term.onData(function(data) {
@@ -77,7 +77,7 @@ const initSocket = async () => {
       document.title = title;
     });
 
-    term.open(document.getElementById('xterm'));
+    term.open(document.getElementById('xterm')!);
     term.focus();
     fitAddon.fit()
 
@@ -93,14 +93,14 @@ const initSocket = async () => {
 
     websocket.onmessage = function(evt) {
       if (evt.data instanceof ArrayBuffer) {
-        term.write(ab2str(evt.data));
+        term.write(ab2str(evt.data as any));
       } else {
         alert(evt.data)
       }
     }
     websocket.onclose = function(evt) {
       term.write("Session terminated");
-      term.destroy();
+      term.dispose()
     }
     websocket.onerror = function(evt) {
       if (typeof console.log == "function") {
@@ -119,7 +119,7 @@ onMounted(async ()=>{
       console.log('终端尺寸变化')
       fitAddon.fit()
     } catch (e) {
-      console.log("e", e.message)
+      console.log("e", e)
     }
   })
 })

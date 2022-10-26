@@ -17,7 +17,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 // 启动minicap
 import {ElMessage} from "element-plus";
@@ -60,8 +60,8 @@ const startMinicap = async ()=>{
   }
   let BLANK_IMG =
       'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
-  let canvas = document.getElementById('canvas')
-  let g = canvas.getContext('2d')
+  let canvas = document.getElementById('canvas') as HTMLCanvasElement
+  let g = canvas.getContext('2d')!
 
   ws.onmessage=(message)=>{
     let blob = new Blob([message.data], {type: 'image/jpeg'})
@@ -70,14 +70,14 @@ const startMinicap = async ()=>{
     img.onload = function() {
       canvas.width = img.width
       canvas.height = img.height
-      document.getElementById('canvas').style.height = 'auto'
+      document.getElementById('canvas')!.style.height = 'auto'
       g.drawImage(img, 0, 0)
       img.onload = null
       img.src = BLANK_IMG
       g.scale(0.5,0.5)
-      img = null
-      u = null
-      blob = null
+      // img = null
+      // u = null
+      // blob = null
     }
     let u = URL.createObjectURL(blob)
     img.src = u
