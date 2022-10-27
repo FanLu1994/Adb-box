@@ -6,6 +6,7 @@
         <i class="iconfont mr-1" :class="item.icon" ></i>
         {{item.title}}
       </div>
+      <div class="indicator"></div>
     </div>
 
   </div>
@@ -66,19 +67,18 @@ const currentMenu = computed(()=>{
   justify-content: center;
   align-items: center;
   &:hover{
-    background: #34D399;
-    color: white;
-    border-radius: 5px;
+    color: #34D399;
   }
 }
 
 .menu-active{
-  background: #34D399;
-  color: white;
+  color: #34D399;
   border-radius: 5px;
+  z-index: 1;
 }
 
 .menus{
+  position: relative;
   padding: 3px 5px;
   margin: 5px 5px;
   width: 100%;
@@ -86,6 +86,44 @@ const currentMenu = computed(()=>{
   background: white;
   //border:1px solid #e4e7ed;
   box-shadow:0px 2px 10px rgba(0, 0, 0, .12);
+
+  .indicator{
+    position: absolute;
+    left: 0;
+    width: 120px;
+    height: 50px;
+    transition: 0.5s;
+  }
+
+  .indicator::before{
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 100px;
+    height: 28px;
+    background: #ECFDF5;
+    border-radius: 5px;
+    transition: 0.5s;
+  }
+
+  div:nth-child(1).menu-active ~ .indicator{
+    transform: translateX(calc(100px * 0));
+  }
+  div:nth-child(2).menu-active ~ .indicator{
+    transform: translateX(calc(100px * 1));
+  }
+  div:nth-child(3).menu-active ~ .indicator{
+    transform: translateX(calc(100px * 2));
+  }
+  div:nth-child(4).menu-active ~ .indicator{
+    transform: translateX(calc(100px * 3));
+  }
 }
+
+
+
+
 
 </style>
