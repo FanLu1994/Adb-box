@@ -8,9 +8,13 @@ import ScreenCpy from "@/views/ScreenCpy.vue";
 import OptHome from "@/views/opt/OptHome.vue";
 import DeviceSelector from "@/views/DeviceSelector.vue";
 import {CustomAdbClient} from "./utils/adbClient";
+import viteConfig from "../vite.config";
 
 onMounted(()=>{
   CustomAdbClient.trackDevice()
+  if(import.meta.env.MODE==='development'){
+    createContextMenu()
+  }
   createContextMenu()
 })
 

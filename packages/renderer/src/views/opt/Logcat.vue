@@ -193,6 +193,9 @@ const startLogcat = async ()=>{
   })
 
   reader.on('entry',(entry:LogcatEntry)=>{
+    if(entry.priority<targetLogLevel.value){
+      return
+    }
     if(logCatInfo.list.length>=maxLength){
       logCatInfo.list.splice(0,1)
     }

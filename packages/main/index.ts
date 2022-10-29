@@ -31,6 +31,7 @@ let win: BrowserWindow | null = null
 const preload = join(__dirname, '../preload/index.cjs')
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin
 const url = `http://${process.env['VITE_DEV_SERVER_HOST']}:${process.env['VITE_DEV_SERVER_PORT']}`
+// const indexHtml = join(ROOT_PATH.dist, 'index.html')
 const indexHtml = join(ROOT_PATH.dist, 'index.html')
 
 
@@ -54,6 +55,7 @@ async function createWindow() {
 
   if (app.isPackaged) {
     win.loadFile(indexHtml)
+    win.webContents.openDevTools()
   } else {
     win.loadURL(url)
     win.webContents.openDevTools()

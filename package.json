@@ -1,6 +1,6 @@
 {
   "name": "adb-box",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "dist/main/index.cjs",
   "description": "Adb工具箱",
   "author": "夏目 <1066580119@qq.com>",

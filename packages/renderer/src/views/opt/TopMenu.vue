@@ -67,14 +67,17 @@ const currentMenu = computed(()=>{
   justify-content: center;
   align-items: center;
   &:hover{
-    color: #34D399;
+    color: black;
   }
 }
 
 .menu-active{
-  color: #34D399;
+  color: black;
   border-radius: 5px;
   z-index: 1;
+  &:hover{
+    color:black;
+  }
 }
 
 .menus{
@@ -103,7 +106,7 @@ const currentMenu = computed(()=>{
     transform: translate(-50%,-50%);
     width: 100px;
     height: 28px;
-    background: #ECFDF5;
+    background: #34D399;
     border-radius: 5px;
     transition: 0.5s;
   }

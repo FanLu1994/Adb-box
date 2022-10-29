@@ -45,6 +45,10 @@
             <i class="iconfont icon-shanchu uninstall-icon" title="卸载" @click="uninstallApp(scope.row)"></i>
           </template>
         </el-table-column>
+
+        <template #empty>
+          当前未选择设备或者获取数据失败
+        </template>
       </el-table>
     </div>
 
@@ -83,7 +87,7 @@ const device = reactive({
 })
 
 // 加载
-const loading = ref(true)
+const loading = ref(false)
 
 
 // 上传文件
@@ -94,6 +98,10 @@ const showUploadBlock = ref(false)
 // 刷新应用列表
 const RefreshAppList = async ()=>{
   console.log("刷新列表")
+
+  if(!deviceStore.CurrentDevice){
+    return
+  }
   loading.value = true
   GetAppList(await GetDeviceIP()).then(res=>{
     device.list = []
@@ -190,8 +198,8 @@ const tableRegionSize = useElementSize(tableRegion)
 
 // 计算当前视口适应的表格高度
 const getTableHeight = computed(()=>{
-  console.log(tableRegionSize.height.value - 50)
-  return tableRegionSize.height.value - 50
+  console.log(tableRegionSize.height.value - 70)
+  return tableRegionSize.height.value - 70
 })
 
 const getTableWidth = computed(()=>{
@@ -213,7 +221,6 @@ onMounted( ()=>{
   height: 100%;
   margin: 1px 5px;
   border-radius: 7px;
-  background: #e0e0e0;
   box-shadow:  2px 2px 2px #9f9f9f,
     -2px -2px 2px #ffffff;
 }
