@@ -28,7 +28,7 @@
     "sass": "^1.52.3",
     "sass-loader": "^13.0.0",
     "sass-resources-loader": "^2.2.5",
-    "simple-git-hooks": "^2.8.0",
+    "simple-git-hooks": "^2.8.1",
     "tailwindcss": "^2.2.19",
     "typescript": "^4.7.2",
     "vite": "^2.9.8",
